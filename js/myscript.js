@@ -16,6 +16,12 @@ function setUp() {
 	// x = new PrimerSet('asdf', [10,40], [100,250]);
 	// x.set_hxb2(1,2,3,4);
 	// console.log(x);
+	// usage example:
+	// var a = [4, 'a', 1, 'a', 2, '1', 4, 4];
+	// var unique = a.filter( onlyUnique ); // returns ['a', 1, 2, '1']
+	// console.log(a);
+	// console.log(unique);
+
 }
 
 // JavaScript PrimerSet class
@@ -71,6 +77,11 @@ function getCount(myarray, myvalue) {
 
 	return count;
 } 
+
+function onlyUnique(value, index, self) { 
+	// http://stackoverflow.com/questions/1960473/unique-values-in-an-array
+	return self.indexOf(value) === index;
+}
 
 function slidingWindow(width, step, primer_width) {
 	// calculate clonality within a sliding window of fixed width across the 
@@ -128,8 +139,13 @@ function slidingWindow(width, step, primer_width) {
 
 			// loop through primers
 			for (var i = 0; i < primers.length; i++) {
-				count_sequences(key, align_data[key], hxb2s_data[key], [primers[i]])
 				// total, detectable, unique, unique_amp = count_sequences(p, alignments[p], hxb2s[p], [primer])
+				var mycounts = count_sequences(key, align_data[key], hxb2s_data[key], [primers[i]])
+				// check if it's right
+				if (i == 10 || i == 100) {
+					console.log('res1');
+					console.log(mycounts);
+				}
 			}
 
 		}
@@ -192,6 +208,46 @@ function count_sequences(name, sequences, hxb2, primers) {
 		}
 	}
 	var detectable = amplicons.length;
+	// check if we got it right:
+	// if (name == 'PIC11286') {
+	// 	if (primers[0].f[0] == 8000) {
+	// 		console.log(amplicons);
+	// 	}
+	// }
+
+	// output 3: number of unique sequences (ignoring actual detectability)
+	// Python:
+	// amp_ignore_gaps = ['*'.join([s[p.hxb2f[1]:p.hxb2r[0]] for p in primers]) for s in sequences]
+	// for s in sequences:
+	//     '*'.join( [s[p.hxb2f[1]:p.hxb2r[0]] for p in primers] )
+	var amp_ignore_gaps = [];
+	for (var i = 0; i < sequences.length; i++) {
+		var tmparray = []
+		for (var j = 0; j < primers.length; j++) {
+			tmparray.push(sequences[i].slice(primers[j].hxb2f[1],primers[j].hxb2r[0]))
+		}
+		amp_ignore_gaps.push(tmparray.join('*'));
+	}
+	var unique = amp_ignore_gaps.filter(onlyUnique).length;
+	// check if we got it right:
+	// if (name == 'PIC11286') {
+	// 	if (primers[0].f[0] == 8000) {
+	// 		console.log(amp_ignore_gaps.filter(onlyUnique).length);
+	// 		console.log(amp_ignore_gaps.filter(onlyUnique));
+	// 	}
+	// }
+
+	//output 4: number of unique, detectable sequences
+	var unique_amp = amplicons.filter(onlyUnique).length;
+
+	var myReturnVal = new SeqCounts(total, detectable, unique, unique_amp);
+	return myReturnVal;
+	// return {
+	// 	'total': total,
+	// 	'detectable': detectable,
+	// 	'unique': unique,
+	// 	'unique_amp': unique_amp
+	// }
 
 }
 
