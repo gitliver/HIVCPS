@@ -102,55 +102,67 @@ function slidingWindow(width, step, primer_width) {
 
 	var f_sites = generateArray(hxb2_length-width - primer_width - 1, step);
 	f_sites.push(hxb2_length-width - primer_width - 1);
-	console.log('f_sites');
-	console.log(f_sites);
+	// console.log('f_sites');
+	// console.log(f_sites);
 
 	// convert to the PrimerSet format for count_sequences
 	var primers = [];
 	for (var i = 0; i < f_sites.length; i++) {
 		primers.push(new PrimerSet('', [f_sites[i], f_sites[i] + primer_width], [f_sites[i] + width, f_sites[i] + width + primer_width]))
 	}
-	console.log(primers)
+	// console.log(primers);
 
 	// storage for all of these parameters for all of the patients
-	var f_primer_lists = [];
-	var total_lists = [];
-	var detectable_lists = [];
-	var unique_lists = [];
-	var unique_amp_lists = [];
-	var p_amp_lists = [];
-	var p_det_lists = [];
+	// (this will be a dictionary whose keys are patients)
+	var allpatientparams = new Object();
 
 	// now to the meat of the method...
-	// loop through keys (i.e., patients)
-	// key --> p
+	// loop through patient keys
 	for (var key in align_data) {
 		if (align_data.hasOwnProperty(key)) {
 			console.log('calculating patient ' + key);
 
 			// store output
-			var f_primer_list = [];
-			var total_list = [];
-			var detectable_list = [];
-			var unique_list = [];
-			var unique_amp_list = [];
-			var p_amp_list = [];
-			var p_det_list = [];
+			var patientparams = {	'f_primer_list': [],
+						'total_list': [],
+						'detectable_list': [],
+						'unique_list': [],
+						'unique_amp_list': [],
+						'p_amp_list': [],
+						'p_det_list': [] };
 
 			// loop through primers
 			for (var i = 0; i < primers.length; i++) {
 				// total, detectable, unique, unique_amp = count_sequences(p, alignments[p], hxb2s[p], [primer])
 				var mycounts = count_sequences(key, align_data[key], hxb2s_data[key], [primers[i]])
 				// check if it's right
-				if (i == 10 || i == 100) {
-					console.log('res1');
-					console.log(mycounts);
+				// if (i == 10 || i == 100) {
+				// 	console.log('res1');
+				// 	console.log(mycounts);
+				// }
+
+				// calculate %amp
+				var p_amp = null;
+				if (mycounts.unique_amp != 0) {
+					p_amp = mycounts.unique_amp/mycounts.detectable;
 				}
-			}
 
+				// store the results for this primer set
+				patientparams['f_primer_list'].push(primers[i].f[0]);
+				patientparams['total_list'].push(mycounts.total);
+				patientparams['detectable_list'].push(mycounts.detectable);
+				patientparams['unique_list'].push(mycounts.unique);
+				patientparams['unique_amp_list'].push(mycounts.unique_amp);
+				patientparams['p_amp_list'].push(p_amp);
+				patientparams['p_det_list'].push(mycounts.detectable/mycounts.total);
+			} // primer loop
+
+			// now store all the results for this patient.
+			allpatientparams[key] = patientparams;
 		}
-	}
-
+	} // patient loop
+	console.log('allpatientparams');
+	console.log(allpatientparams);
 }
 
 function count_sequences(name, sequences, hxb2, primers) {
@@ -218,8 +230,6 @@ function count_sequences(name, sequences, hxb2, primers) {
 	// output 3: number of unique sequences (ignoring actual detectability)
 	// Python:
 	// amp_ignore_gaps = ['*'.join([s[p.hxb2f[1]:p.hxb2r[0]] for p in primers]) for s in sequences]
-	// for s in sequences:
-	//     '*'.join( [s[p.hxb2f[1]:p.hxb2r[0]] for p in primers] )
 	var amp_ignore_gaps = [];
 	for (var i = 0; i < sequences.length; i++) {
 		var tmparray = []
