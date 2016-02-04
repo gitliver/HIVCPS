@@ -12,7 +12,7 @@ function setUp() {
 
 	console.log('Testing 1 2 3');
 	// console.log(hxb2s_data);
-	// console.log(align_data);
+	// console.log(alignments_data);
 	// x = new PrimerSet('asdf', [10,40], [100,250]);
 	// x.set_hxb2(1,2,3,4);
 	// console.log(x);
@@ -118,8 +118,8 @@ function slidingWindow(width, step, primer_width) {
 
 	// now to the meat of the method...
 	// loop through patient keys
-	for (var key in align_data) {
-		if (align_data.hasOwnProperty(key)) {
+	for (var key in alignments_data) {
+		if (alignments_data.hasOwnProperty(key)) {
 			console.log('calculating patient ' + key);
 
 			// store output
@@ -134,7 +134,7 @@ function slidingWindow(width, step, primer_width) {
 			// loop through primers
 			for (var i = 0; i < primers.length; i++) {
 				// total, detectable, unique, unique_amp = count_sequences(p, alignments[p], hxb2s[p], [primer])
-				var mycounts = count_sequences(key, align_data[key], hxb2s_data[key], [primers[i]])
+				var mycounts = count_sequences(key, alignments_data[key], hxb2s_data[key], [primers[i]])
 				// check if it's right
 				// if (i == 10 || i == 100) {
 				// 	console.log('res1');
