@@ -87,6 +87,9 @@ function getPrimerStats(primers) {
 	// calculate stats for the given primer list
 	// (primers is an array of primer objects)
 
+	console.log('get primer stats');
+	console.log(primers);
+
 	// storage for all of these parameters for all of the patients
 	// (this will be a dictionary whose keys are patients -
 	// and the return value of this function)
@@ -270,7 +273,7 @@ function count_sequences(name, sequences, hxb2, primers) {
 
 }
 
-function run_primer_set(alignments, hxb2s, primers) {
+function runPrimerSet(primers) {
 	// given all the patient alignments and specified primer sets (by name and
 	// hxb2 coordinates), print to file the four quantities calculated in
 	// count_sequences for every patient.
@@ -280,7 +283,14 @@ function run_primer_set(alignments, hxb2s, primers) {
 
 	console.log('primers');
 	console.log(primers);
+	var mypatientparams = getPrimerStats(primers);
+	console.log('allpatientparams');
+	console.log(mypatientparams);
 }
 
 setUp();
-slidingWindow(1000, 10, 10);
+
+runPrimerSet([new PrimerSet('p6-gag-pro', [1870, 1894], [3409, 3435])]);
+runPrimerSet([new PrimerSet('env 667', [7001, 7021], [7647, 7668])]);
+
+// slidingWindow(1000, 10, 10);
