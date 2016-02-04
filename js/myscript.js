@@ -83,40 +83,15 @@ function onlyUnique(value, index, self) {
 	return self.indexOf(value) === index;
 }
 
-function slidingWindow(width, step, primer_width) {
-	// calculate clonality within a sliding window of fixed width across the 
-	// genome (and print to file through accessory methods)
-
-	console.log('width');
-	console.log(width);
-	console.log('step');
-	console.log(step);
-	console.log('primer_width');
-	console.log(primer_width);
-
-	// come up with a list of "primer sites" to test. 
-	// the reverse "primer" will be the f_site plus the window width.
-	var hxb2_length = 9716;
-	console.log('hxb2_length');
-	console.log(hxb2_length);
-
-	var f_sites = generateArray(hxb2_length-width - primer_width - 1, step);
-	f_sites.push(hxb2_length-width - primer_width - 1);
-	// console.log('f_sites');
-	// console.log(f_sites);
-
-	// convert to the PrimerSet format for count_sequences
-	var primers = [];
-	for (var i = 0; i < f_sites.length; i++) {
-		primers.push(new PrimerSet('', [f_sites[i], f_sites[i] + primer_width], [f_sites[i] + width, f_sites[i] + width + primer_width]))
-	}
-	// console.log(primers);
+function getPrimerStats(primers) {
+	// calculate stats for the given primer list
+	// (primers is an array of primer objects)
 
 	// storage for all of these parameters for all of the patients
-	// (this will be a dictionary whose keys are patients)
+	// (this will be a dictionary whose keys are patients -
+	// and the return value of this function)
 	var allpatientparams = new Object();
 
-	// now to the meat of the method...
 	// loop through patient keys
 	for (var key in alignments_data) {
 		if (alignments_data.hasOwnProperty(key)) {
@@ -161,8 +136,42 @@ function slidingWindow(width, step, primer_width) {
 			allpatientparams[key] = patientparams;
 		}
 	} // patient loop
+
+	return allpatientparams;
+}
+
+function slidingWindow(width, step, primer_width) {
+	// calculate clonality within a sliding window of fixed width across the
+	// genome (and print to file through accessory methods)
+
+	console.log('width');
+	console.log(width);
+	console.log('step');
+	console.log(step);
+	console.log('primer_width');
+	console.log(primer_width);
+
+	// come up with a list of "primer sites" to test.
+	// the reverse "primer" will be the f_site plus the window width.
+	var hxb2_length = 9716;
+	console.log('hxb2_length');
+	console.log(hxb2_length);
+
+	var f_sites = generateArray(hxb2_length-width - primer_width - 1, step);
+	f_sites.push(hxb2_length-width - primer_width - 1);
+	// console.log('f_sites');
+	// console.log(f_sites);
+
+	// convert to the PrimerSet format for count_sequences
+	var primers = [];
+	for (var i = 0; i < f_sites.length; i++) {
+		primers.push(new PrimerSet('', [f_sites[i], f_sites[i] + primer_width], [f_sites[i] + width, f_sites[i] + width + primer_width]))
+	}
+	// console.log(primers);
+
+	var mypatientparams = getPrimerStats(primers);
 	console.log('allpatientparams');
-	console.log(allpatientparams);
+	console.log(mypatientparams);
 }
 
 function count_sequences(name, sequences, hxb2, primers) {
@@ -259,6 +268,18 @@ function count_sequences(name, sequences, hxb2, primers) {
 	// 	'unique_amp': unique_amp
 	// }
 
+}
+
+function run_primer_set(alignments, hxb2s, primers) {
+	// given all the patient alignments and specified primer sets (by name and
+	// hxb2 coordinates), print to file the four quantities calculated in
+	// count_sequences for every patient.
+
+	// this method works for one OR MORE primer sets simultaneously. primers is
+	// a list of Primer objects.
+
+	console.log('primers');
+	console.log(primers);
 }
 
 setUp();
