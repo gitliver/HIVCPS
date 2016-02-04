@@ -7,23 +7,53 @@
 
   <title>HIV CPS Calculator</title>
 
-  <meta name="description" content="HIV Web App">
+  <meta name="description" content="HIV Clonal Prediction Score Web App">
   <meta name="author" content="me">
-  <!--
-  <link rel="stylesheet" href="css/styles.css">
-  -->
+  <link href="css/custom.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Slab|Crimson+Text|Cinzel|Cantata+One" rel="stylesheet" type="text/css">
 
 </head>
 
 <body>
 
-  <h3>Clonal Prediction Score for HIV-1 Sequences</h3>
+  <div class="center">
+    <div class="f0">Clonal Prediction Score for HIV-1 Sequences</div>
+    <i class="subhead">A Tool for Evaluating a Primer Set Against HXB2</i>
+    <br>
+    <br>
+    <!--
+    <img src="img/test.300.jpg" alt="image" width="150">
+    -->
+  </div>
 
   <br>
+  <hr>
+  <br>
+
+  <span class="f1">Input your primer coordinates (forward_start, forward_end, reverse_start, reverse_end):</span>
+  <br>
+
+  <!-- javascript output goes here: -->
+  <div class="f2" id="jsoutput"></div>
+
+  <br>
+  <hr>
+  <br>
+
+  <div class="f2">
+    <b>If you use the CPS Calculator, please cite the following article:</b>
+
+    <br>
+    <br>
+
+    Sarah et al.
+    <br>
+    <a>Optimization of PCR Strategies to Predict Clonality of Full-Length HIV-1 Sequences</a>.
+  </div>
 
   <script type="text/javascript" src="js/data/alignments_dump.js"></script>
   <script type="text/javascript" src="js/data/hxb2s_dump.js"></script>
-  <script src="js/myscript.js"></script>
+  <script type="text/javascript" src="js/cpscalculator.js"></script>
 
 </body>
 

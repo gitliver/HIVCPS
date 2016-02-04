@@ -286,6 +286,12 @@ function runPrimerSet(primers) {
 	var mypatientparams = getPrimerStats(primers);
 	console.log('allpatientparams');
 	console.log(mypatientparams);
+	writeHTMLOutput(mypatientparams);
+}
+
+function writeHTMLOutput(patientparamsout) {
+	// write patient params output to HTML
+	document.getElementById("jsoutput").innerHTML = patientparamsout["PIC90770"]["detectable_list"][0];
 }
 
 setUp();
