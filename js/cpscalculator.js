@@ -10,7 +10,7 @@ suggesting clonality.
 function setUp() {
 	// Initialize basics ...
 
-	console.log('Testing 1 2 3');
+	console.log('Testing');
 	// console.log(hxb2s_data);
 	// console.log(alignments_data);
 	// x = new PrimerSet('asdf', [10,40], [100,250]);
@@ -87,8 +87,8 @@ function getPrimerStats(primers) {
 	// calculate stats for the given primer list
 	// (primers is an array of primer objects)
 
-	console.log('get primer stats');
-	console.log(primers);
+	// console.log('get primer stats');
+	// console.log(primers);
 
 	// storage for all of these parameters for all of the patients
 	// (this will be a dictionary whose keys are patients -
@@ -173,8 +173,8 @@ function slidingWindow(width, step, primer_width) {
 	// console.log(primers);
 
 	var mypatientparams = getPrimerStats(primers);
-	console.log('allpatientparams');
-	console.log(mypatientparams);
+	// console.log('allpatientparams');
+	// console.log(mypatientparams);
 }
 
 function count_sequences(name, sequences, hxb2, primers) {
@@ -281,22 +281,49 @@ function runPrimerSet(primers) {
 	// this method works for one OR MORE primer sets simultaneously. primers is
 	// a list of Primer objects.
 
-	console.log('primers');
-	console.log(primers);
+	// console.log('primers');
+	// console.log(primers);
+	// console.log('allpatientparams');
+	// console.log(mypatientparams);
 	var mypatientparams = getPrimerStats(primers);
-	console.log('allpatientparams');
-	console.log(mypatientparams);
 	writeHTMLOutput(mypatientparams);
 }
 
 function writeHTMLOutput(patientparamsout) {
 	// write patient params output to HTML
-	document.getElementById("jsoutput").innerHTML = patientparamsout["PIC90770"]["detectable_list"][0];
+
+	// a string representing an HTML table header
+	var tablehead = '';
+	// a string representing HTML table data
+	var tabledata = '';
+
+	// loop through keys
+	for (var patient in patientparamsout) {
+		if (patientparamsout.hasOwnProperty(patient)) {
+			tabledata += '<tr><td>' + patient+ '</td>';
+			tablehead = '';
+			// loop through secondary keys
+			for (var mylist in patientparamsout[patient]) {
+				if (patientparamsout[patient].hasOwnProperty(mylist)) {
+					tablehead += '<td>' + mylist + '</td>';
+					if (patientparamsout[patient][mylist][0].toString().indexOf('.') > -1) {
+						tabledata += '<td>' + patientparamsout[patient][mylist][0].toPrecision(4).toString() + '</td>';
+					}
+					else {
+						tabledata += '<td>' + patientparamsout[patient][mylist][0] + '</td>';
+					}
+				}
+			}
+			tabledata += '</tr>';
+		}
+	}
+
+	// full table
+	var tablestr = '<table border="1"><tr><td>patient</td>' + tablehead + '</tr>' + tabledata + '</table>';
+	document.getElementById("jsoutput").innerHTML = tablestr;
 }
 
 setUp();
-
 runPrimerSet([new PrimerSet('p6-gag-pro', [1870, 1894], [3409, 3435])]);
-runPrimerSet([new PrimerSet('env 667', [7001, 7021], [7647, 7668])]);
-
+// runPrimerSet([new PrimerSet('env 667', [7001, 7021], [7647, 7668])]);
 // slidingWindow(1000, 10, 10);
