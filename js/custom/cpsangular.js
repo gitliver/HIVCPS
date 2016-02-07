@@ -1,18 +1,13 @@
 var cpsApp = angular.module('cpsApp', []);
 
-cpsApp.controller("cpsCtrl", function($scope) {
-    $scope.firstName = "John";
-    $scope.lastName = "Doe";
-});
-
 cpsApp.controller('cpsCtrl', ['$scope', function($scope) {
 
 	// a primer objects with coordinates
 	$scope.primerobj = {
-		'forwardStart': null,
-		'forwardEnd': null,
-		'reverseStart': null,
-		'reverseEnd': null 
+		'forwardStart': 0,
+		'forwardEnd': 0,
+		'reverseStart': 0,
+		'reverseEnd': 0 
 	};
 
 	// patient categories
@@ -24,7 +19,7 @@ cpsApp.controller('cpsCtrl', ['$scope', function($scope) {
 
 		for (var key in $scope.primerobj) {
 			if ($scope.primerobj.hasOwnProperty(key)) {
-				if ($scope.primerobj[key] == null) {
+				if ($scope.primerobj[key] == 0) {
 					$scope.warning = 'Please enter values for all the fields';
 				}
 			}
@@ -48,7 +43,7 @@ cpsApp.controller('cpsCtrl', ['$scope', function($scope) {
 
 		// if no problems with the input data
 		if ($scope.warning.length == 0) {
-			runPrimerSet([new PrimerSet('p6-gag-pro', [1870, 1894], [3409, 3435])]);
+			runPrimerSet([new PrimerSet('user-supplied primer', [$scope.primerobj.forwardStart, $scope.primerobj.forwardEnd], [$scope.primerobj.reverseStart, $scope.primerobj.reverseEnd])]);
 		}
 	}
 }]);

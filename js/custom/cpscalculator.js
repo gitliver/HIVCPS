@@ -109,7 +109,7 @@ function getPrimerStats(primers) {
 				// }
 
 				// calculate %amp
-				var p_amp = null;
+				var p_amp = 0;
 				if (mycounts.unique_amp != 0) {
 					p_amp = mycounts.unique_amp/mycounts.detectable;
 				}
@@ -272,9 +272,9 @@ function runPrimerSet(primers) {
 
 	// console.log('primers');
 	// console.log(primers);
+	var mypatientparams = getPrimerStats(primers);
 	// console.log('allpatientparams');
 	// console.log(mypatientparams);
-	var mypatientparams = getPrimerStats(primers);
 	writeHTMLOutput(mypatientparams);
 }
 
