@@ -61,15 +61,18 @@
   <br>
 
   <div ng-cloak>{{ primerobj | json }}</div>
-  <div ng-cloak>{{ warning }}</div>
+  <div ng-cloak class="alert">{{ warning }}</div>
 
   <br>
   <br>
 
-  <label ng-cloak ng-repeat="pcat in pcategories">
-    <input type="checkbox" value="{{pcat}}"/> {{pcat}}
+  <!-- http://stackoverflow.com/questions/14514461/angularjs-how-to-bind-to-list-of-checkbox-values -->
+  <label ng-cloak ng-repeat="(pcat, enabled) in pcategories">
+    <input type="checkbox" ng-model="pcategories[pcat]"/> {{pcat}}
     <br>
   </label>
+
+  <div ng-cloak>{{ pcategories | json }}</div>
 
   </span> <!-- f1 font style -->
 
@@ -77,7 +80,14 @@
   <br>
 
   <!-- javascript output goes here: -->
+  <!-- 
   <div class="f1" id="jsoutput"></div>
+  -->
+  <div ng-if="isLoading">
+    <i class="alert2">{{ isLoadingMessage }}</i>
+  </div>
+  <div ng-if="isLoading == false">
+  </div>
 
   <br>
   <hr>
@@ -107,10 +117,12 @@
   </span> <!-- cpsCtrl -->
   </span> <!-- cpsApp -->
 
+  <script type="text/javascript" src="js/custom/cpsangular.js"></script>
+  <!-- 
   <script type="text/javascript" src="js/data/alignments_dump.js"></script>
   <script type="text/javascript" src="js/data/hxb2s_dump.js"></script>
-  <script type="text/javascript" src="js/custom/cpsangular.js"></script>
   <script type="text/javascript" src="js/custom/cpscalculator.js"></script>
+  -->
 
 </body>
 
