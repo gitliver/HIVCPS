@@ -10,18 +10,7 @@ suggesting clonality.
 function setUp() {
 	// Initialize basics ...
 
-	console.log('Testing');
-	// console.log(hxb2s_data);
-	// console.log(alignments_data);
-	// x = new PrimerSet('asdf', [10,40], [100,250]);
-	// x.set_hxb2(1,2,3,4);
-	// console.log(x);
-	// usage example:
-	// var a = [4, 'a', 1, 'a', 2, '1', 4, 4];
-	// var unique = a.filter( onlyUnique ); // returns ['a', 1, 2, '1']
-	// console.log(a);
-	// console.log(unique);
-
+	console.log('Testing 1 2 3');
 }
 
 // JavaScript PrimerSet class
@@ -323,7 +312,7 @@ function writeHTMLOutput(patientparamsout) {
 	document.getElementById("jsoutput").innerHTML = tablestr;
 }
 
-setUp();
-runPrimerSet([new PrimerSet('p6-gag-pro', [1870, 1894], [3409, 3435])]);
+// setUp();
+// runPrimerSet([new PrimerSet('p6-gag-pro', [1870, 1894], [3409, 3435])]);
 // runPrimerSet([new PrimerSet('env 667', [7001, 7021], [7647, 7668])]);
 // slidingWindow(1000, 10, 10);
