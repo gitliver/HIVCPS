@@ -19,8 +19,11 @@ cpsApp.controller('cpsCtrl', ['$scope', function($scope) {
 
 		for (var key in $scope.primerobj) {
 			if ($scope.primerobj.hasOwnProperty(key)) {
-				if ($scope.primerobj[key] == 0) {
-					$scope.warning = 'Please enter values for all the fields';
+				if ($scope.primerobj[key] <= 0) {
+					$scope.warning = 'Please enter positive values for all the fields';
+				}
+				else if ($scope.primerobj[key].toString().indexOf('.') > -1) {
+					$scope.warning = 'Please enter integer values for all the fields';
 				}
 			}
 		}

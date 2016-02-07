@@ -39,18 +39,18 @@
   <br>
   <br>
   Forward start:
-  <input type="number" ng-model="primerobj.forwardStart"/>
+  <input type="number" ng-model="primerobj.forwardStart" min="1"/>
   <br>
   Forward end:
   &nbsp;
-  <input type="number" ng-model="primerobj.forwardEnd"/>
+  <input type="number" ng-model="primerobj.forwardEnd" min="1"/>
   <br>
   Reverse start:
-  <input type="number" ng-model="primerobj.reverseStart"/>
+  <input type="number" ng-model="primerobj.reverseStart" min="1"/>
   <br>
   Reverse end:
   &nbsp;
-  <input type="number" ng-model="primerobj.reverseEnd"/>
+  <input type="number" ng-model="primerobj.reverseEnd" min="1"/>
 
   <br>
   <br>
@@ -60,6 +60,7 @@
   <br>
   <br>
 
+  <div ng-cloak>{{ primerobj.forwardStart }}</div>
   <div ng-cloak>{{ warning }}</div>
 
   <br>
