@@ -78,21 +78,47 @@
   <div ng-cloak>{{ pcategories | json }}</div>
   -->
 
-  </span> <!-- f1 font style -->
-
   <br>
   <br>
 
-  <div ng-if="isLoading">
+  <div ng-if="isLoadingMessage">
     <i class="alert2">{{ isLoadingMessage }}</i>
   </div>
-  <div ng-if="isLoading == false">
+  <!-- output goes here: -->
+  <div ng-if="myoutput && !isLoadingMessage">
+    Output:
+
+    <br>
+    <br>
+
+    <table border="1">
+      <tr>
+      <b>
+      <td>patient</td>
+      <td>f_primer</td>
+      <td>total</td>
+      <td>detectable</td>
+      <td>unique</td>
+      <td>unique_amp</td>
+      <td>%amp</td>
+      <td>%det</td>
+      </b>
+      </tr>
+
+      <tr ng-repeat="(key, val) in myoutput">
+      <td>{{key}}</td>
+      <td>{{val.f_primer_list[0] | number}}</td>
+      <td>{{val.total_list[0] | number}}</td>
+      <td>{{val.detectable_list[0] | number}}</td>
+      <td>{{val.unique_list[0] | number}}</td>
+      <td>{{val.unique_amp_list[0] | number}}</td>
+      <td>{{val.p_amp_list[0] | number}}</td>
+      <td>{{val.p_det_list[0] | number}}</td>
+      </tr>
+    </table>
   </div>
 
-  <!-- javascript output goes here: -->
-  <!-- 
-  -->
-  <div class="f1" id="jsoutput"></div>
+  </span> <!-- f1 font style -->
 
   <br>
   <hr>
@@ -124,10 +150,6 @@
 
   <script type="text/javascript" src="js/custom/cpsangular.js"></script>
   <script type="text/javascript" src="js/custom/cpscalculator.js"></script>
-  <!-- 
-  <script type="text/javascript" src="js/data/alignments_dump.js"></script>
-  <script type="text/javascript" src="js/data/hxb2s_dump.js"></script>
-  -->
 
 </body>
 

@@ -270,49 +270,8 @@ function runPrimerSet(primers, hxb2s_data, alignments_data) {
 	// this method works for one OR MORE primer sets simultaneously. primers is
 	// a list of Primer objects.
 
-	// console.log('primers');
-	// console.log(primers);
-	// console.log('align');
-	// console.log(alignments_data);
 	var mypatientparams = getPrimerStats(primers, hxb2s_data, alignments_data);
-	// console.log('allpatientparams');
-	// console.log(mypatientparams);
-	// writeHTMLOutput(mypatientparams);
 	return mypatientparams;
-}
-
-function writeHTMLOutput(patientparamsout) {
-	// write patient params output to HTML
-
-	// a string representing an HTML table header
-	var tablehead = '';
-	// a string representing HTML table data
-	var tabledata = '';
-
-	// loop through keys
-	for (var patient in patientparamsout) {
-		if (patientparamsout.hasOwnProperty(patient)) {
-			tabledata += '<tr><td>' + patient+ '</td>';
-			tablehead = '';
-			// loop through secondary keys
-			for (var mylist in patientparamsout[patient]) {
-				if (patientparamsout[patient].hasOwnProperty(mylist)) {
-					tablehead += '<td>' + mylist + '</td>';
-					if (patientparamsout[patient][mylist][0].toString().indexOf('.') > -1) {
-						tabledata += '<td>' + patientparamsout[patient][mylist][0].toPrecision(4).toString() + '</td>';
-					}
-					else {
-						tabledata += '<td>' + patientparamsout[patient][mylist][0] + '</td>';
-					}
-				}
-			}
-			tabledata += '</tr>';
-		}
-	}
-
-	// full table
-	var tablestr = '<table border="1"><tr><td>patient</td>' + tablehead + '</tr>' + tabledata + '</table>';
-	document.getElementById("jsoutput").innerHTML = tablestr;
 }
 
 // setUp();

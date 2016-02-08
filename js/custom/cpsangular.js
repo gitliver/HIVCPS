@@ -111,6 +111,9 @@ cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', '
 	// message to the user - start null until submit button pushed
 	$scope.isLoadingMessage = null;
 
+	// the output
+	$scope.myoutput = null;
+
 	// this function gets called when the user submits his primer
 	$scope.submitPrimer = function() {
 
@@ -121,6 +124,9 @@ cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', '
 		if ($scope.warning.length == 0) {
 
 			console.log('run primer set');
+
+			// the specs of this class are defined in the other script - this variable will be used when calling runPrimerSet
+			var myprimerset = [new PrimerSet('user-supplied primer', [$scope.primerobj.forwardStart, $scope.primerobj.forwardEnd], [$scope.primerobj.reverseStart, $scope.primerobj.reverseEnd])];
 
 			// get promise object (array of promises and names)
 			var promiseobj = loadDataService2.getpromises($scope.ref, $scope.pcategories);
@@ -135,7 +141,9 @@ cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', '
 					// once the code enters this block, it means all the async $http.get methods have finished
 					// i.e., all data is loaded
 					$scope.isLoadingMessage = null;
-					console.log(arrayOfResults);
+
+					// console.log(arrayOfResults);
+
 					// loop thro loaded data sets
 					for (var j = 0; j < arrayOfResults.length; j++) {
 						// set properties of ref
@@ -150,35 +158,25 @@ cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', '
 								$scope.pcategories[k].isloaded = true;
 							}
 						}
-					}
-				});
-				// $http.get('js/data/hxb2s.json').then(function (response) {
-				// 	// once the code enters this block, it means the async $http.get method has finished
-				// 	$scope.hxb2s = response.data;
-				// 	$scope.isLoading = false;
-				// 	$scope.isLoadingMessage = null;
-				// 	console.log($scope.hxb2s);
-				// });
-			}
-			// otherwise, just run
+					} // loop thro loaded data sets
+
+					// data loaded, now run
+					// hard wire align data for now
+					$scope.myoutput = runPrimerSet(myprimerset, $scope.ref.seqdata, $scope.pcategories[0].seqdata);
+				}); // $q.all
+			} // load data
+			// otherwise if data loaded, just run
 			else {
 				console.log('run');
 
-				// the specs of this class are defined in the other script
-				var myprimerset = [new PrimerSet('user-supplied primer', [$scope.primerobj.forwardStart, $scope.primerobj.forwardEnd], [$scope.primerobj.reverseStart, $scope.primerobj.reverseEnd])];
+				// hard wire align data for now
+				$scope.myoutput = runPrimerSet(myprimerset, $scope.ref.seqdata, $scope.pcategories[0].seqdata);
+				// hxb2 coordinates of some popular primer sets
+				// kearney_f = (1870,1894)
+				// kearney_r = (3409,3435)
+				// console.log(output);
 
-				// hard wire data for now
-				var output = runPrimerSet(myprimerset, $scope.ref.seqdata, $scope.pcategories[0].seqdata);
-				console.log(output);
-
-			}
-
-			// loadDataService.loadData();
-			// console.log(hxb2s_data);
-			// var hxb2s = dataFactory;
-			// hxb2s = loadDataService2.loadData();
-			// console.log(hxb2s);
-			// runPrimerSet([new PrimerSet('user-supplied primer', [$scope.primerobj.forwardStart, $scope.primerobj.forwardEnd], [$scope.primerobj.reverseStart, $scope.primerobj.reverseEnd])]);
-		}
-	}
+			} // run
+		} // no problems with input
+	} // scope.submitPrimer
 }]);
