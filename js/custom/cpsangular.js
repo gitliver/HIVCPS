@@ -119,28 +119,39 @@ cpsApp.service('computeCpsService', [function() {
 		var mycps = 0;
 		var counter = 0;
 		var sum = 0;
+		var mylist = [];
 
 		for (var key in myoutput) {
 			if (myoutput.hasOwnProperty(key)) {
 				counter++;
 				sum += myoutput[key].p_amp_list[0];
+				mylist.push(myoutput[key].p_amp_list[0]);
 			}
 		}
 
 		if (counter > 0) mycps = sum/counter;
 		
-		return mycps;
+		// return mycps;
+		return mylist;
 	};
 }]);
 
 cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', 'loadDataService2', 'concatObjService', 'computeCpsService', function($scope, $http, $q, validateInputService, loadDataService2, concatObjService, computeCpsService) {
 
 	// a primer objects with coordinates
+	// $scope.primerobj = {
+	// 	'forwardStart': 0,
+	// 	'forwardEnd': 0,
+	// 	'reverseStart': 0,
+	// 	'reverseEnd': 0 
+	// };
+
+	// initialize
 	$scope.primerobj = {
-		'forwardStart': 0,
-		'forwardEnd': 0,
-		'reverseStart': 0,
-		'reverseEnd': 0 
+		'forwardStart': 1870,
+		'forwardEnd': 1894,
+		'reverseStart': 3409,
+		'reverseEnd': 3435 
 	};
 
 	// patient categories
@@ -166,6 +177,9 @@ cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', '
 
 	// the CPS
 	$scope.cps = null;
+
+	// the CPS standard deviation
+	$scope.std = null;
 
 	// this function gets called when the user submits his primer
 	$scope.submitPrimer = function() {
@@ -219,7 +233,8 @@ cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', '
 					$scope.myalignmentdata = concatObjService.concatObj($scope.pcategories);
 					// now run
 					$scope.myoutput = runPrimerSet(myprimerset, $scope.ref.seqdata, $scope.myalignmentdata);
-					$scope.cps = computeCpsService.computeCps($scope.myoutput);
+					$scope.cps = math.mean(computeCpsService.computeCps($scope.myoutput));
+					$scope.std = math.std(computeCpsService.computeCps($scope.myoutput));
 				}); // $q.all
 			} // load data
 			// otherwise if data loaded, just run
@@ -231,7 +246,8 @@ cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', '
 				// this should only be called if new boxes are checked for the new submission - fix later!
 				$scope.myalignmentdata = concatObjService.concatObj($scope.pcategories);
 				$scope.myoutput = runPrimerSet(myprimerset, $scope.ref.seqdata, $scope.myalignmentdata);
-				$scope.cps = computeCpsService.computeCps($scope.myoutput);
+				$scope.cps = math.mean(computeCpsService.computeCps($scope.myoutput));
+				$scope.std = math.std(computeCpsService.computeCps($scope.myoutput));
 				// hxb2 coordinates of some popular primer sets
 				// kearney_f = (1870,1894)
 				// kearney_r = (3409,3435)
