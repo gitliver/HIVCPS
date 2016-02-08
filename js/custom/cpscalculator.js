@@ -72,7 +72,7 @@ function onlyUnique(value, index, self) {
 	return self.indexOf(value) === index;
 }
 
-function getPrimerStats(primers) {
+function getPrimerStats(primers, hxb2s_data, alignments_data) {
 	// calculate stats for the given primer list
 	// (primers is an array of primer objects)
 
@@ -132,7 +132,7 @@ function getPrimerStats(primers) {
 	return allpatientparams;
 }
 
-function slidingWindow(width, step, primer_width) {
+function slidingWindow(width, step, primer_width, hxb2s_data, alignments_data) {
 	// calculate clonality within a sliding window of fixed width across the
 	// genome (and print to file through accessory methods)
 
@@ -161,7 +161,7 @@ function slidingWindow(width, step, primer_width) {
 	}
 	// console.log(primers);
 
-	var mypatientparams = getPrimerStats(primers);
+	var mypatientparams = getPrimerStats(primers, hxb2s_data, alignments_data);
 	// console.log('allpatientparams');
 	// console.log(mypatientparams);
 }
@@ -262,7 +262,7 @@ function count_sequences(name, sequences, hxb2, primers) {
 
 }
 
-function runPrimerSet(primers) {
+function runPrimerSet(primers, hxb2s_data, alignments_data) {
 	// given all the patient alignments and specified primer sets (by name and
 	// hxb2 coordinates), print to file the four quantities calculated in
 	// count_sequences for every patient.
@@ -272,10 +272,13 @@ function runPrimerSet(primers) {
 
 	// console.log('primers');
 	// console.log(primers);
-	var mypatientparams = getPrimerStats(primers);
+	// console.log('align');
+	// console.log(alignments_data);
+	var mypatientparams = getPrimerStats(primers, hxb2s_data, alignments_data);
 	// console.log('allpatientparams');
 	// console.log(mypatientparams);
-	writeHTMLOutput(mypatientparams);
+	// writeHTMLOutput(mypatientparams);
+	return mypatientparams;
 }
 
 function writeHTMLOutput(patientparamsout) {
