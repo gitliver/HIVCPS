@@ -67,9 +67,12 @@ cpsApp.service('loadDataService2', ['$http', function($http) {
 		var mypromises = [];
 		// corresponding array of names
 		var mynames = [];
+		// number checked
+		var numchecked = 0;
 
 		// figure out if we have to load data
 		for (var i = 0; i < mypcats.length; i++) {
+			if (mypcats[i].ischecked) numchecked++;
 			if (mypcats[i].ischecked && !(mypcats[i].isloaded)) {
 				mypromises.push($http.get(mypcats[i].jsonpath));
 				mynames.push(mypcats[i].name);
@@ -82,11 +85,55 @@ cpsApp.service('loadDataService2', ['$http', function($http) {
 			mynames.push(ref.name);
 		}
 
-		return { 'mypromises': mypromises, 'mynames': mynames};
+		return { 'mypromises': mypromises, 'mynames': mynames, 'numchecked': numchecked };
 	};
 }]);
 
-cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', 'loadDataService2', function($scope, $http, $q, validateInputService, loadDataService2) {
+cpsApp.service('concatObjService', [function() {
+	this.concatObj = function(mypcats) {
+		// concatenate alignment data
+
+		// the concatenated alignments
+		var myalignments = {};
+
+		// loop thro checked alignment sets
+		for (var i = 0; i < mypcats.length; i++) {
+			if (mypcats[i].ischecked) {
+				// now loop thro sequence data itself
+				for (var key in mypcats[i].seqdata) {
+					if (mypcats[i].seqdata.hasOwnProperty(key)) {
+						myalignments[key] = mypcats[i].seqdata[key];
+					}
+				}
+			}
+		}
+
+		return myalignments;
+	};
+}]);
+
+cpsApp.service('computeCpsService', [function() {
+	this.computeCps = function(myoutput) {
+		// compute cps 
+
+		var mycps = 0;
+		var counter = 0;
+		var sum = 0;
+
+		for (var key in myoutput) {
+			if (myoutput.hasOwnProperty(key)) {
+				counter++;
+				sum += myoutput[key].p_amp_list[0];
+			}
+		}
+
+		if (counter > 0) mycps = sum/counter;
+		
+		return mycps;
+	};
+}]);
+
+cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', 'loadDataService2', 'concatObjService', 'computeCpsService', function($scope, $http, $q, validateInputService, loadDataService2, concatObjService, computeCpsService) {
 
 	// a primer objects with coordinates
 	$scope.primerobj = {
@@ -111,8 +158,14 @@ cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', '
 	// message to the user - start null until submit button pushed
 	$scope.isLoadingMessage = null;
 
+	// the alignment data, possibly concatenated over multiple categories
+	$scope.myalignmentdata = null;
+
 	// the output
 	$scope.myoutput = null;
+
+	// the CPS
+	$scope.cps = null;
 
 	// this function gets called when the user submits his primer
 	$scope.submitPrimer = function() {
@@ -160,17 +213,25 @@ cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', '
 						}
 					} // loop thro loaded data sets
 
-					// data loaded, now run
-					// hard wire align data for now
-					$scope.myoutput = runPrimerSet(myprimerset, $scope.ref.seqdata, $scope.pcategories[0].seqdata);
+					// data loaded, now get alignment data
+					// it's really inefficient to run this function every time
+					// this should only be called if new boxes are checked for the new submission - fix later!
+					$scope.myalignmentdata = concatObjService.concatObj($scope.pcategories);
+					// now run
+					$scope.myoutput = runPrimerSet(myprimerset, $scope.ref.seqdata, $scope.myalignmentdata);
+					$scope.cps = computeCpsService.computeCps($scope.myoutput);
 				}); // $q.all
 			} // load data
 			// otherwise if data loaded, just run
 			else {
 				console.log('run');
 
-				// hard wire align data for now
-				$scope.myoutput = runPrimerSet(myprimerset, $scope.ref.seqdata, $scope.pcategories[0].seqdata);
+				// data loaded, now get alignment data
+				// it's really inefficient to run this function every time
+				// this should only be called if new boxes are checked for the new submission - fix later!
+				$scope.myalignmentdata = concatObjService.concatObj($scope.pcategories);
+				$scope.myoutput = runPrimerSet(myprimerset, $scope.ref.seqdata, $scope.myalignmentdata);
+				$scope.cps = computeCpsService.computeCps($scope.myoutput);
 				// hxb2 coordinates of some popular primer sets
 				// kearney_f = (1870,1894)
 				// kearney_r = (3409,3435)
