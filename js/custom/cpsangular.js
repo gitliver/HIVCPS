@@ -112,9 +112,33 @@ cpsApp.service('concatObjService', [function() {
 	};
 }]);
 
+cpsApp.service('setPcatsService', [function() {
+	this.setPcats = function(arrayOfResults, promiseobj, ref, mypcats) {
+		// when the data has finished loading,
+		// this function sets properties of the pcat objects - such as their seqdata fields
+
+		// loop thro loaded data sets
+		for (var j = 0; j < arrayOfResults.length; j++) {
+			// set properties of ref
+			if (promiseobj.mynames[j] == 'HXB2S') {
+				ref.seqdata = arrayOfResults[j].data;
+				ref.isloaded = true;
+			}
+			// set properties of pcats
+			for (var k = 0; k < mypcats.length; k++) {
+				if (mypcats[k].name == promiseobj.mynames[j]) {
+					mypcats[k].seqdata = arrayOfResults[j].data;
+					mypcats[k].isloaded = true;
+				}
+			}
+		} // loop thro loaded data sets
+	};
+}]);
+
 cpsApp.service('computeCpsService', [function() {
 	this.computeCps = function(myoutput) {
-		// compute cps 
+		// formerly, compute cps 
+		// now: return list of %amp values for the given set of patients
 
 		var mycps = 0;
 		var counter = 0;
@@ -136,7 +160,7 @@ cpsApp.service('computeCpsService', [function() {
 	};
 }]);
 
-cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', 'loadDataService2', 'concatObjService', 'computeCpsService', function($scope, $http, $q, validateInputService, loadDataService2, concatObjService, computeCpsService) {
+cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', 'loadDataService2', 'concatObjService', 'setPcatsService', 'computeCpsService', function($scope, $http, $q, validateInputService, loadDataService2, concatObjService, setPcatsService, computeCpsService) {
 
 	// a primer objects with coordinates
 	// $scope.primerobj = {
@@ -146,7 +170,9 @@ cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', '
 	// 	'reverseEnd': 0 
 	// };
 
-	// initialize
+	// initialize with hxb2 coordinates of some popular primer sets
+	// kearney_f = (1870,1894); kearney_r = (3409,3435)
+
 	$scope.primerobj = {
 		'forwardStart': 1870,
 		'forwardEnd': 1894,
@@ -190,7 +216,7 @@ cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', '
 		// if no problems with the input data, proceed
 		if ($scope.warning.length == 0) {
 
-			console.log('run primer set');
+			// console.log('run primer set');
 
 			// the specs of this class are defined in the other script - this variable will be used when calling runPrimerSet
 			var myprimerset = [new PrimerSet('user-supplied primer', [$scope.primerobj.forwardStart, $scope.primerobj.forwardEnd], [$scope.primerobj.reverseStart, $scope.primerobj.reverseEnd])];
@@ -198,8 +224,6 @@ cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', '
 			// get promise object (array of promises and names)
 			var promiseobj = loadDataService2.getpromises($scope.ref, $scope.pcategories);
 
-			// console.log(promiseobj);
-			
 			// load data if it's not already loaded, then run
 			if (promiseobj.mypromises.length > 0) {
 				$scope.isLoadingMessage = "Sequence data loading. Please be patient...";
@@ -209,27 +233,12 @@ cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', '
 					// i.e., all data is loaded
 					$scope.isLoadingMessage = null;
 
-					// console.log(arrayOfResults);
-
-					// loop thro loaded data sets
-					for (var j = 0; j < arrayOfResults.length; j++) {
-						// set properties of ref
-						if (promiseobj.mynames[j] == 'HXB2S') {
-							$scope.ref.seqdata = arrayOfResults[j].data;
-							$scope.ref.isloaded = true;
-						}
-						// set properties of pcats
-						for (var k = 0; k < $scope.pcategories.length; k++) {
-							if ($scope.pcategories[k].name == promiseobj.mynames[j]) {
-								$scope.pcategories[k].seqdata = arrayOfResults[j].data;
-								$scope.pcategories[k].isloaded = true;
-							}
-						}
-					} // loop thro loaded data sets
+					// This populates the pcats objects with sequence data, etc., from the arrayOfResults
+					setPcatsService.setPcats(arrayOfResults, promiseobj, $scope.ref, $scope.pcategories); 
 
 					// data loaded, now get alignment data
-					// it's really inefficient to run this function every time
-					// this should only be called if new boxes are checked for the new submission - fix later!
+					// it's inefficient to run this function every time
+					// this should only be called if new boxes are checked for the new submission
 					$scope.myalignmentdata = concatObjService.concatObj($scope.pcategories);
 					// now run
 					$scope.myoutput = runPrimerSet(myprimerset, $scope.ref.seqdata, $scope.myalignmentdata);
@@ -239,20 +248,15 @@ cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', '
 			} // load data
 			// otherwise if data loaded, just run
 			else {
-				console.log('run');
+				// console.log('run');
 
 				// data loaded, now get alignment data
-				// it's really inefficient to run this function every time
-				// this should only be called if new boxes are checked for the new submission - fix later!
+				// it's inefficient to run this function every time
+				// this should only be called if new boxes are checked for the new submission
 				$scope.myalignmentdata = concatObjService.concatObj($scope.pcategories);
 				$scope.myoutput = runPrimerSet(myprimerset, $scope.ref.seqdata, $scope.myalignmentdata);
 				$scope.cps = math.mean(computeCpsService.computeCps($scope.myoutput));
 				$scope.std = math.std(computeCpsService.computeCps($scope.myoutput));
-				// hxb2 coordinates of some popular primer sets
-				// kearney_f = (1870,1894)
-				// kearney_r = (3409,3435)
-				// console.log(output);
-
 			} // run
 		} // no problems with input
 	} // scope.submitPrimer

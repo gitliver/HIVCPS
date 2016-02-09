@@ -87,7 +87,7 @@ function getPrimerStats(primers, hxb2s_data, alignments_data) {
 	// loop through patient keys
 	for (var key in alignments_data) {
 		if (alignments_data.hasOwnProperty(key)) {
-			console.log('calculating patient ' + key);
+			// console.log('calculating patient ' + key);
 
 			// store output
 			var patientparams = {	'f_primer_list': [],
