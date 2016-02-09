@@ -1,9 +1,36 @@
 .center {
     margin: auto;
-    width: 500px;
+    width: 850px;
     /* border:3px solid red; */
-    text-align: center;
+    /* text-align: center; */
     padding: 10px;
+}
+
+.box1 {
+    float: left;
+    /*
+    border:3px solid red;
+    */
+    padding: 10px;
+}
+
+.box2 {
+    float: left;
+    padding-top: 4px;
+    padding-right: 5px;
+}
+
+.box3 {
+    width: 480px;
+    font-size: 80%;
+}
+
+.halfline {
+    line-height: 50%;
+}
+
+p.clear {
+    clear: both;
 }
 
 .subhead {
@@ -28,9 +55,26 @@ h3 {
     /* color: grey; */
 }
 
+table {
+    border-collapse: collapse;
+    font-size: 90%;
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 3px;
+}
+
 .heavy {
     font-weight: 900;
     color: black;
+}
+
+.heavyredborder {
+    font-weight: 900;
+    color: black;
+    border: 1px solid red;
+    padding: 5px;
 }
 
 .alert {
@@ -41,4 +85,77 @@ h3 {
 .alert2 {
     font-weight: bold;
     color: blue;
+}
+
+/* -------------- */
+
+/* http://www.bestcssbuttongenerator.com/ */
+
+.myButton {
+    -moz-box-shadow:inset 4px -5px 6px 4px #ffffff;
+    -webkit-box-shadow:inset 4px -5px 6px 4px #ffffff;
+    box-shadow:inset 4px -5px 6px 4px #ffffff;
+    background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffffff), color-stop(1, #f6f6f6));
+    background:-moz-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
+    background:-webkit-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
+    background:-o-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
+    background:-ms-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
+    background:linear-gradient(to bottom, #ffffff 5%, #f6f6f6 100%);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f6f6f6',GradientType=0);
+    background-color:#ffffff;
+    -moz-border-radius:11px;
+    -webkit-border-radius:11px;
+    border-radius:11px;
+    border:3px solid #dcdcdc;
+    display:inline-block;
+    cursor:pointer;
+    color:#666666;
+    /* font-family:Georgia; */
+        font-family: 'Roboto Slab', serif;
+    font-size:15px;
+    font-weight:bold;
+    padding:6px 39px;
+    text-decoration:none;
+    text-shadow:0px 0px 0px #ffffff;
+    /* http://stackoverflow.com/questions/20593224/remove-blue-selected-outline-on-buttons */
+    outline: none;
+}
+.myButton:hover {
+    background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #f6f6f6), color-stop(1, #ffffff));
+    background:-moz-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
+    background:-webkit-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
+    background:-o-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
+    background:-ms-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
+    background:linear-gradient(to bottom, #f6f6f6 5%, #ffffff 100%);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#f6f6f6', endColorstr='#ffffff',GradientType=0);
+    background-color:#f6f6f6;
+}
+.myButton:active {
+    position:relative;
+    top:1px;
+}
+
+/* http://callmenick.com/post/various-css-input-text-styles */
+
+.style2 {
+    padding: 4px;
+    border: solid 2px #c9c9c9;
+    transition: border 0.3s;
+}
+
+.style2 input:focus,
+.style2 input.focus {
+    border: solid 5px #969696;
+}
+
+.plab {
+    display: inline-block;
+    float: left;
+    clear: left;
+    width: 120px;
+}
+
+.pin {
+    display: inline-block;
+    float: left;
 }

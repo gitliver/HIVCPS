@@ -21,51 +21,46 @@
   <span ng-controller="cpsCtrl">
    
   <div class="center">
-    <div class="f0">Clonal Prediction Score for HIV-1 Sequences</div>
-    <i class="subhead">A Tool for Evaluating a Primer Set Against HXB2</i>
-    <br>
-    <br>
-    <!--
-    <img src="img/test.300.jpg" alt="image" width="150">
-    -->
-  </div>
+
+  <div class="f0">Clonal Prediction Score for HIV-1 Sequences</div>
+  <i class="subhead">A Tool for Evaluating a Primer Set Against HXB2</i>
+  <br>
+  <br>
 
   <br>
   <hr>
   <br>
 
+  <div class="box1">
   <span class="f1"> <!-- f1 font style -->
-  Input your primer coordinates:
+  Please input your primer coordinates:
   <br>
   <br>
-  Forward start:
-  <input type="number" ng-model="primerobj.forwardStart" min="1"/>
+  <span class="plab">Forward start:</span>
+  <input class="pin style2" type="number" ng-model="primerobj.forwardStart" min="1"/>
   <br>
-  Forward end:
-  &nbsp;
-  <input type="number" ng-model="primerobj.forwardEnd" min="1"/>
+  <span class="plab">Forward end:</span>
+  <input class="pin style2" type="number" ng-model="primerobj.forwardEnd" min="1"/>
   <br>
-  Reverse start:
-  <input type="number" ng-model="primerobj.reverseStart" min="1"/>
+  <span class="plab">Reverse start:</span>
+  <input class="pin style2" type="number" ng-model="primerobj.reverseStart" min="1"/>
   <br>
-  Reverse end:
-  &nbsp;
-  <input type="number" ng-model="primerobj.reverseEnd" min="1"/>
+  <span class="plab">Reverse end:</span>
+  <input class="pin style2" type="number" ng-model="primerobj.reverseEnd" min="1"/>
 
   <br>
   <br>
-
-  <button ng-click="submitPrimer()">submit primer</button>
-
-  <br>
   <br>
 
-  <!--
-  <div ng-cloak>{{ primerobj | json }}</div>
-  -->
-  <div ng-cloak class="alert">{{ warning }}</div>
+  <button class="myButton" ng-click="submitPrimer()">submit primer</button>
 
   <br>
+
+  <div ng-if="warning">
+    <br>
+    <div ng-cloak class="alert">{{ warning }}</div>
+  </div>
+
   <br>
 
   <!-- http://stackoverflow.com/questions/14514461/angularjs-how-to-bind-to-list-of-checkbox-values -->
@@ -74,40 +69,43 @@
     <br>
   </label>
 
-  <!--
-  <div ng-cloak>{{ pcategories | json }}</div>
-  -->
+  </span> <!-- f1 font style -->
+  </div> <!-- box1 -->
 
-  <br>
-  <br>
+  <div class="box1">
+  <span class="f1"> <!-- f1 font style -->
 
-  <div ng-if="isLoadingMessage">
+  <!-- while the data is loading, display message: -->
+  <div ng-cloak ng-if="isLoadingMessage">
     <i class="alert2">{{ isLoadingMessage }}</i>
   </div>
-  <!-- output goes here: -->
-  <div ng-if="myoutput && !isLoadingMessage">
-    Output:
+
+  <!-- once data has finished loading, output goes here: -->
+  <div ng-cloak ng-if="myoutput && !isLoadingMessage">
+
+    <span class="heavyredborder">Your cps is: {{ cps | number }} (standard dev: {{ std | number }})</span>
+
+    <br>
+    <br>
+
+    Table data:
 
     <br>
     <br>
 
     <table border="1">
       <tr>
-      <b>
-      <td>patient</td>
-      <td>f_primer</td>
-      <td>total</td>
-      <td>detectable</td>
-      <td>unique</td>
-      <td>unique_amp</td>
-      <td>%amp</td>
-      <td>%det</td>
-      </b>
+      <td><strong>patient</strong></td>
+      <td><strong>total</strong></td>
+      <td><strong>detectable</strong></td>
+      <td><strong>unique</strong></td>
+      <td><strong>unique_amp</strong></td>
+      <td><strong>%amp</strong></td>
+      <td><strong>%det</strong></td>
       </tr>
 
       <tr ng-repeat="(key, val) in myoutput">
       <td>{{key}}</td>
-      <td>{{val.f_primer_list[0] | number}}</td>
       <td>{{val.total_list[0] | number}}</td>
       <td>{{val.detectable_list[0] | number}}</td>
       <td>{{val.unique_list[0] | number}}</td>
@@ -117,14 +115,12 @@
       </tr>
     </table>
 
-    <br>
-    <br>
-
-    Your cps is: {{ cps | number }} (standard dev: {{ std | number }})
-
-  </div>
+  </div> <!-- output -->
 
   </span> <!-- f1 font style -->
+  </div> <!-- box1 -->
+
+  <p class="clear"></p>
 
   <br>
   <hr>
@@ -136,21 +132,24 @@
     <br>
     <br>
 
-    Sarah et al.
+    Sarah Laskey, Christopher Pohlmeyer, Oliver Elliott, Katherine Bruner and Robert Siliciano.
     <br>
-    <a>Optimization of PCR Strategies to Predict Clonality of Full-Length HIV-1 Sequences</a>.
+    <strong>Optimization of PCR Strategies to Predict Clonality of Full-Length HIV-1 Sequences.</strong>
 
     <br>
     <br>
 
+    <div class="box2">
     <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a>
-    <br>
-    <small>
-    <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/InteractiveResource" property="dct:title" rel="dct:type">CPS Calculator</span> by <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">...</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
-    </small>
+    </div>
 
-  </div>
+    <div class="box3">
+    <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/InteractiveResource" property="dct:title" rel="dct:type">CPS Calculator</span> by <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">Sarah Laskey and Oliver Elliott</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+    </div>
 
+  </div> <!-- f2 -->
+
+  </div> <!-- center -->
   </span> <!-- cpsCtrl -->
   </span> <!-- cpsApp -->
 
