@@ -240,7 +240,7 @@ cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', '
 					// it's inefficient to run this function every time
 					// this should only be called if new boxes are checked for the new submission
 					$scope.myalignmentdata = concatObjService.concatObj($scope.pcategories);
-					// now run
+					// now run - this calls a function defined in the other script, cpscalculator.js 
 					$scope.myoutput = runPrimerSet(myprimerset, $scope.ref.seqdata, $scope.myalignmentdata);
 					$scope.cps = math.mean(computeCpsService.computeCps($scope.myoutput));
 					$scope.std = math.std(computeCpsService.computeCps($scope.myoutput));
