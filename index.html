@@ -7,10 +7,18 @@
 
   <title>HIV CPS Calculator</title>
 
+  <!-- meta --> 
   <meta name="description" content="HIV Clonal Prediction Score Web App">
   <meta name="author" content="me">
-  <link href="css/custom.css" rel="stylesheet" type="text/css">
+
+  <!-- CSS --> 
+  <link href="css/custom/custom.css" rel="stylesheet" type="text/css">
+  <link href="css/vendor/c3.min.css" rel="stylesheet" type="text/css">
+
+  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Roboto+Slab|Crimson+Text|Cinzel|Cantata+One" rel="stylesheet" type="text/css">
+
+  <!-- AngularJS -->
   <script type="text/javascript" src="js/vendor/angular.min.js"></script>
 
 </head>
@@ -115,6 +123,15 @@
       </tr>
     </table>
 
+    <br>
+
+    <!-- Chartjs -->
+    <!--
+    <canvas id="myChart" width="400" height="400"></canvas>
+    -->
+    <!-- C3.js -->
+    <div id="chart"></div>
+
   </div> <!-- output -->
 
   </span> <!-- f1 font style -->
@@ -156,6 +173,12 @@
   <script type="text/javascript" src="js/custom/cpsangular.js"></script>
   <script type="text/javascript" src="js/custom/cpscalculator.js"></script>
   <script type="text/javascript" src="js/vendor/math.min.js"></script>
+  <script type="text/javascript" src="js/vendor/d3.min.js"></script>
+  <script type="text/javascript" src="js/vendor/c3.min.js"></script>
+  <!--
+  <script type="text/javascript" src="js/vendor/Chart.min.js"></script>
+  <script type="text/javascript" src="js/vendor/Chart.Scatter.min.js"></script>
+  -->
 
 </body>
 
