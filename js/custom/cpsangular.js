@@ -9,6 +9,83 @@ function Pcat(name, ischecked, isloaded, jsonpath, seqdata) {
 	this.seqdata = seqdata;		// data
 }
 
+// hacky getter function to extract properties of output object - return arrays of keys and pamps
+function getSlice(myoutput) {
+
+	// keys 
+	var mylist = [];
+	// pamp list
+	var mylist2 = [];
+
+	for (var key in myoutput) {
+		if (myoutput.hasOwnProperty(key)) {
+			mylist.push(key);
+			mylist2.push(myoutput[key].p_amp_list[0]);
+		}
+	}
+
+	return { 'patList': mylist, 'pampList': mylist2};
+}
+
+// function to graph final array of pamps with ChartJS
+function makeGraph(myOutput) {
+	// http://www.chartjs.org/docs/
+
+	console.log(myOutput);
+
+	// get context element
+	var ctx = document.getElementById("myChart").getContext("2d");
+
+	// http://stackoverflow.com/questions/19590865/from-an-array-of-objects-extract-value-of-a-property-as-array
+	// var pampList = myOutput.map(function(x) {return x.p_amp_list[0];});
+
+	var chartData = {
+    		labels: getSlice(myOutput).patList,
+		datasets: [
+		{
+			label: "%amp",
+			// fillColor: "rgba(220,220,220,0.2)",
+			// strokeColor: "rgba(220,220,220,1)",
+			pointColor: "rgba(220,220,220,1)",
+			// pointStrokeColor: "#fff",
+			// pointHighlightFill: "#fff",
+			// pointHighlightStroke: "rgba(220,220,220,1)",
+			data: getSlice(myOutput).pampList 
+		},
+	    ]
+	};
+
+	chartOptions = {
+		scaleShowGridLines : true,
+		scaleGridLineColor : "rgba(0,0,0,.05)",
+		scaleGridLineWidth : 1,
+		scaleShowHorizontalLines: true,
+		scaleShowVerticalLines: true,
+		//Boolean - Whether the line is curved between points
+		// bezierCurve : true,
+		//Number - Tension of the bezier curve between points
+		// bezierCurveTension : 0.4,
+		//Boolean - Whether to show a dot for each point
+		pointDot : true,
+		//Number - Radius of each point dot in pixels
+		pointDotRadius : 4,
+		//Number - Pixel width of point dot stroke
+		pointDotStrokeWidth : 1,
+		//Number - amount extra to add to the radius to cater for hit detection outside the drawn point
+		pointHitDetectionRadius : 20,
+		//Boolean - Whether to show a stroke for datasets
+		datasetStroke : true,
+		//Number - Pixel width of dataset stroke
+		datasetStrokeWidth : 2,
+		datasetFill : false,
+		//String - A legend template
+		legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
+	};
+
+	var myLineChart = new Chart(ctx).Line(chartData, chartOptions);
+	// var myLineChart = new Chart(ctx).Scatter(chartData, chartOptions);
+}
+
 var cpsApp = angular.module('cpsApp', []);
 
 cpsApp.service('validateInputService', [function() {
@@ -135,32 +212,7 @@ cpsApp.service('setPcatsService', [function() {
 	};
 }]);
 
-cpsApp.service('computeCpsService', [function() {
-	this.computeCps = function(myoutput) {
-		// formerly, compute cps 
-		// now: return list of %amp values for the given set of patients
-
-		var mycps = 0;
-		var counter = 0;
-		var sum = 0;
-		var mylist = [];
-
-		for (var key in myoutput) {
-			if (myoutput.hasOwnProperty(key)) {
-				counter++;
-				sum += myoutput[key].p_amp_list[0];
-				mylist.push(myoutput[key].p_amp_list[0]);
-			}
-		}
-
-		if (counter > 0) mycps = sum/counter;
-		
-		// return mycps;
-		return mylist;
-	};
-}]);
-
-cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', 'loadDataService2', 'concatObjService', 'setPcatsService', 'computeCpsService', function($scope, $http, $q, validateInputService, loadDataService2, concatObjService, setPcatsService, computeCpsService) {
+cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', 'loadDataService2', 'concatObjService', 'setPcatsService', function($scope, $http, $q, validateInputService, loadDataService2, concatObjService, setPcatsService) {
 
 	// a primer objects with coordinates
 	// $scope.primerobj = {
@@ -236,27 +288,24 @@ cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', '
 					// This populates the pcats objects with sequence data, etc., from the arrayOfResults
 					setPcatsService.setPcats(arrayOfResults, promiseobj, $scope.ref, $scope.pcategories); 
 
-					// data loaded, now get alignment data
-					// it's inefficient to run this function every time
-					// this should only be called if new boxes are checked for the new submission
+					// data loaded, now get alignment data (inefficient to run this function every time.
+					// this should only be called if new boxes are checked for the new submission)
 					$scope.myalignmentdata = concatObjService.concatObj($scope.pcategories);
 					// now run - this calls a function defined in the other script, cpscalculator.js 
 					$scope.myoutput = runPrimerSet(myprimerset, $scope.ref.seqdata, $scope.myalignmentdata);
-					$scope.cps = math.mean(computeCpsService.computeCps($scope.myoutput));
-					$scope.std = math.std(computeCpsService.computeCps($scope.myoutput));
+					$scope.cps = math.mean(getSlice($scope.myoutput).pampList);
+					$scope.std = math.std(getSlice($scope.myoutput).pampList);
+					makeGraph($scope.myoutput);
 				}); // $q.all
 			} // load data
 			// otherwise if data loaded, just run
 			else {
-				// console.log('run');
-
-				// data loaded, now get alignment data
-				// it's inefficient to run this function every time
-				// this should only be called if new boxes are checked for the new submission
+				// see comment above
 				$scope.myalignmentdata = concatObjService.concatObj($scope.pcategories);
 				$scope.myoutput = runPrimerSet(myprimerset, $scope.ref.seqdata, $scope.myalignmentdata);
-				$scope.cps = math.mean(computeCpsService.computeCps($scope.myoutput));
-				$scope.std = math.std(computeCpsService.computeCps($scope.myoutput));
+				$scope.cps = math.mean(getSlice($scope.myoutput).pampList);
+				$scope.std = math.std(getSlice($scope.myoutput).pampList);
+				makeGraph($scope.myoutput);
 			} // run
 		} // no problems with input
 	} // scope.submitPrimer

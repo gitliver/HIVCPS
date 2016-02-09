@@ -16,13 +16,14 @@
 
 .box2 {
     float: left;
-    padding-top: 4px;
+    padding-top: 2px;
     padding-right: 5px;
 }
 
 .box3 {
     width: 480px;
     font-size: 80%;
+    line-height: 125%;
 }
 
 .halfline {
