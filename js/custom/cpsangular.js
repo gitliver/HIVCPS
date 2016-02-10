@@ -24,7 +24,7 @@ function getSlice(myoutput) {
 		}
 	}
 
-	return { 'patList': mylist, 'pampList': mylist2};
+	return { 'patList': mylist, 'pampList': mylist2 };
 }
 
 var cpsApp = angular.module('cpsApp', []);
@@ -155,21 +155,38 @@ cpsApp.service('setPcatsService', [function() {
 
 // service to graph final array of pamps
 cpsApp.service('graphService', [function() {
-	this.makeGraph = function(myOutput) {
+	this.makeGraph = function(myOutput, myCPS) {
 		// http://c3js.org
 
-		console.log('chart');
-
+		// %amp list
 		var mydata = ['%amp'];
 		mydata = mydata.concat(getSlice(myOutput).pampList);
+
+		var mydata2 = ['cps/100'];
+		// a horizontal line: cps is a constant
+		for (var i = 1; i < mydata.length; i++) {
+			mydata2.push(myCPS/100);
+		}
+
+		// if use types step (not line) for the second 
+		// dataset, don't get ugly blobs on the line!
 
 		var chart = c3.generate({
 			bindto: '#chart',
 			data: {
 					columns: [
-						mydata
+						mydata,
+						mydata2
 					],
-					type: 'scatter'
+					type: 'scatter',
+					types: {
+						'cps/100': 'step',
+					},
+					colors: {
+						'%amp': '#0000ff',
+						'cps/100': 'red',
+						// 'cps/100': '#cc0099',
+					}
 			},
 			axis: {
 				x: {
@@ -183,11 +200,9 @@ cpsApp.service('graphService', [function() {
 				}
 			},
 			point: {
-				r: 5 
+				r: 5
 			},
 		});
-
-		console.log(chart);
 	};
 }]);
 
@@ -239,7 +254,8 @@ cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', '
 		// if no problems with the input data, proceed
 		if ($scope.warning.length == 0) {
 
-			// console.log('run primer set');
+			// clear graph
+			document.getElementById('chart').innerHTML = "";
 
 			// the specs of this class are defined in the other script - this variable will be used when calling runPrimerSet
 			var myprimerset = [new PrimerSet('user-supplied primer', [$scope.primerobj.forwardStart, $scope.primerobj.forwardEnd], [$scope.primerobj.reverseStart, $scope.primerobj.reverseEnd])];
@@ -266,7 +282,7 @@ cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', '
 					$scope.myoutput = runPrimerSet(myprimerset, $scope.ref.seqdata, $scope.myalignmentdata);
 					$scope.cps = 100 * math.mean(getSlice($scope.myoutput).pampList);
 					$scope.std = 100 * math.std(getSlice($scope.myoutput).pampList);
-					graphService.makeGraph($scope.myoutput);
+					graphService.makeGraph($scope.myoutput, $scope.cps);
 				}); // $q.all
 			} // load data
 			// otherwise if data loaded, just run
@@ -276,7 +292,7 @@ cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', '
 				$scope.myoutput = runPrimerSet(myprimerset, $scope.ref.seqdata, $scope.myalignmentdata);
 				$scope.cps = 100 * math.mean(getSlice($scope.myoutput).pampList);
 				$scope.std = 100 * math.std(getSlice($scope.myoutput).pampList);
-				graphService.makeGraph($scope.myoutput);
+				graphService.makeGraph($scope.myoutput, $scope.cps);
 			} // run
 		} // no problems with input
 	} // scope.submitPrimer
