@@ -166,21 +166,24 @@ cpsApp.service('graphService', [function() {
 		var chart = c3.generate({
 			bindto: '#chart',
 			data: {
-				columns: [
-					mydata
-				],
-				type: 'scatter'
+					columns: [
+						mydata
+					],
+					type: 'scatter'
 			},
 			axis: {
 				x: {
-				    label: 'Patient',
+					label: 'Patient',
+					type: 'category',
+					categories: getSlice(myOutput).patList
+
 				},
 				y: {
-				    label: '%amp'
+					label: '%amp'
 				}
 			},
 			point: {
-				r: 8 
+				r: 5 
 			},
 		});
 
@@ -189,14 +192,6 @@ cpsApp.service('graphService', [function() {
 }]);
 
 cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', 'loadDataService2', 'concatObjService', 'setPcatsService', 'graphService', function($scope, $http, $q, validateInputService, loadDataService2, concatObjService, setPcatsService, graphService) {
-
-	// a primer objects with coordinates
-	// $scope.primerobj = {
-	// 	'forwardStart': 0,
-	// 	'forwardEnd': 0,
-	// 	'reverseStart': 0,
-	// 	'reverseEnd': 0 
-	// };
 
 	// initialize with hxb2 coordinates of some popular primer sets
 	// kearney_f = (1870,1894); kearney_r = (3409,3435)

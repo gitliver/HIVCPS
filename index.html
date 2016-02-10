@@ -21,6 +21,13 @@
   <!-- AngularJS -->
   <script type="text/javascript" src="js/vendor/angular.min.js"></script>
 
+  <!-- more JS -->
+  <script type="text/javascript" src="js/custom/cpsangular.js"></script>
+  <script type="text/javascript" src="js/custom/cpscalculator.js"></script>
+  <script type="text/javascript" src="js/vendor/math.min.js"></script>
+  <script type="text/javascript" src="js/vendor/d3.min.js"></script>
+  <script type="text/javascript" src="js/vendor/c3.min.js"></script>
+
 </head>
 
 <body>
@@ -64,9 +71,9 @@
 
   <br>
 
-  <div ng-if="warning">
+  <div ng-cloak ng-if="warning">
     <br>
-    <div ng-cloak class="alert">{{ warning }}</div>
+    <div class="alert">{{ warning }}</div>
   </div>
 
   <br>
@@ -125,14 +132,11 @@
 
     <br>
 
-    <!-- Chartjs -->
-    <!--
-    <canvas id="myChart" width="400" height="400"></canvas>
-    -->
-    <!-- C3.js -->
-    <div id="chart"></div>
-
   </div> <!-- output -->
+
+  <!-- C3.js -->
+  <!-- hard won fact: C3.js doesn't play well with ng-cloak -->
+  <div id="chart"></div>
 
   </span> <!-- f1 font style -->
   </div> <!-- box1 -->
@@ -169,16 +173,6 @@
   </div> <!-- center -->
   </span> <!-- cpsCtrl -->
   </span> <!-- cpsApp -->
-
-  <script type="text/javascript" src="js/custom/cpsangular.js"></script>
-  <script type="text/javascript" src="js/custom/cpscalculator.js"></script>
-  <script type="text/javascript" src="js/vendor/math.min.js"></script>
-  <script type="text/javascript" src="js/vendor/d3.min.js"></script>
-  <script type="text/javascript" src="js/vendor/c3.min.js"></script>
-  <!--
-  <script type="text/javascript" src="js/vendor/Chart.min.js"></script>
-  <script type="text/javascript" src="js/vendor/Chart.Scatter.min.js"></script>
-  -->
 
 </body>
 
