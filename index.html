@@ -84,6 +84,17 @@
     <br>
   </label>
 
+  <!-- once data has finished loading, output goes here: -->
+  <div ng-cloak ng-if="myoutput && !isLoadingMessage">
+    <br>
+    <u>Forward and reverse primers</u>:
+    <br>
+    <br>
+    <div class="box5">{{ fprimer }}&nbsp;</div>
+    <br>
+    <div class="box5">{{ rprimer }}&nbsp;</div>
+  </div>
+
   </span> <!-- f1 font style -->
   </div> <!-- box1 -->
 

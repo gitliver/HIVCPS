@@ -35,7 +35,10 @@ cpsApp.service('validateInputService', [function() {
 		// function takes primer object and categories dict as input
 		// and returns a warning string
 
+		// warning
 		var warn = 'Please choose at least one category';
+		// length of the sequence
+		var maxlen = 9719;
 
 		// if at least one category checked, turn off warning
 		for (var i = 0; i < mypcats.length; i++) {
@@ -67,8 +70,8 @@ cpsApp.service('validateInputService', [function() {
 			warn = 'Please satisfy the constraint: reverseStart > forwardEnd';
 		}
 
-		if (warn.length == 0 && !(myprimer.reverseEnd <= 9716)) {
-			warn = 'Please satisfy the constraint: reverseEnd <= 9716 ';
+		if (warn.length == 0 && !(myprimer.reverseEnd <= maxlen)) {
+			warn = 'Please satisfy the constraint: reverseEnd <= ' + maxlen;
 		}
 
 		return warn;
@@ -208,6 +211,14 @@ cpsApp.service('graphService', [function() {
 
 cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', 'loadDataService2', 'concatObjService', 'setPcatsService', 'graphService', function($scope, $http, $q, validateInputService, loadDataService2, concatObjService, setPcatsService, graphService) {
 
+	// get reference sequence
+
+	var refseq = null;
+
+	$http.get('js/data/hxb2s_seq.json').then(function(response) {
+        	 refseq = response.data;
+    	});
+
 	// initialize with hxb2 coordinates of some popular primer sets
 	// kearney_f = (1870,1894); kearney_r = (3409,3435)
 
@@ -244,6 +255,12 @@ cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', '
 
 	// the CPS standard deviation
 	$scope.std = null;
+
+	// the foward primer nucleotide string
+	$scope.fprimer = '';
+
+	// the reverse primer nucleotide string
+	$scope.rprimer = '';
 
 	// this function gets called when the user submits his primer
 	$scope.submitPrimer = function() {
@@ -282,6 +299,8 @@ cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', '
 					$scope.myoutput = runPrimerSet(myprimerset, $scope.ref.seqdata, $scope.myalignmentdata);
 					$scope.cps = 100 * math.mean(getSlice($scope.myoutput).pampList);
 					$scope.std = 100 * math.std(getSlice($scope.myoutput).pampList);
+					$scope.fprimer = refseq['HXB2'].substring($scope.primerobj['forwardStart'] - 1, $scope.primerobj['forwardEnd']);
+					$scope.rprimer = refseq['HXB2'].substring($scope.primerobj['reverseStart'] - 1, $scope.primerobj['reverseEnd']);
 					graphService.makeGraph($scope.myoutput, $scope.cps);
 				}); // $q.all
 			} // load data
@@ -292,6 +311,8 @@ cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', '
 				$scope.myoutput = runPrimerSet(myprimerset, $scope.ref.seqdata, $scope.myalignmentdata);
 				$scope.cps = 100 * math.mean(getSlice($scope.myoutput).pampList);
 				$scope.std = 100 * math.std(getSlice($scope.myoutput).pampList);
+				$scope.fprimer = refseq['HXB2'].substring($scope.primerobj['forwardStart'] - 1, $scope.primerobj['forwardEnd']);
+				$scope.rprimer = refseq['HXB2'].substring($scope.primerobj['reverseStart'] - 1, $scope.primerobj['reverseEnd']);
 				graphService.makeGraph($scope.myoutput, $scope.cps);
 			} // run
 		} // no problems with input

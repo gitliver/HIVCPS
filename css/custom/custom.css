@@ -30,6 +30,13 @@
     width: 300px;
 }
 
+.box5 {
+    width: 300px;
+    overflow-x: scroll;
+    color: #660066;
+    font-size: 90%;
+}
+
 .halfline {
     line-height: 50%;
 }
