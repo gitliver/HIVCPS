@@ -149,6 +149,30 @@
   <!-- hard won fact: C3.js doesn't play well with ng-cloak -->
   <div id="chart"></div>
 
+  <!-- user can add points to graph -->
+  <div class="box6" ng-cloak ng-if="myoutput && !isLoadingMessage">
+  <small>
+
+    <br>
+    Add data points to the graph:
+    <br>
+    <br>
+    <span class="plab"># tot sequences analyzed:</span>
+    <input class="pin style2" type="number" ng-model="userobj.totseq" min="0"/>
+    <br>
+    <span class="plab"># uniq sequences analyzed:</span>
+    <input class="pin style2" type="number" ng-model="userobj.uniqseq" min="0"/>
+    <br>
+    <br>
+    <br>
+
+    <div class="center2">
+    <button class="myButton" ng-click="addPoints()">submit data</button>
+    </div>
+
+  </small>
+  </div> <!-- add points to graph  -->
+
   </span> <!-- f1 font style -->
   </div> <!-- box1 -->
 

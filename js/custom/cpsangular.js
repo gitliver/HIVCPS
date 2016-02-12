@@ -158,18 +158,22 @@ cpsApp.service('setPcatsService', [function() {
 
 // service to graph final array of pamps
 cpsApp.service('graphService', [function() {
-	this.makeGraph = function(myOutput, myCPS) {
+	this.makeGraph = function(myOutput, myCPS, userxdata, userydata) {
 		// http://c3js.org
 
 		// %amp list
-		var mydata = ['%amp'];
-		mydata = mydata.concat(getSlice(myOutput).pampList);
+		// var mydata = ['%amp'];
+		// mydata = mydata.concat(getSlice(myOutput).pampList);
 
 		var mydata2 = ['cps/100'];
 		// a horizontal line: cps is a constant
-		for (var i = 1; i < mydata.length; i++) {
+		for (var i = 1; i < userydata.length; i++) {
 			mydata2.push(myCPS/100);
 		}
+
+		console.log(mydata2);
+		console.log(userxdata);
+		console.log(userydata);
 
 		// if use types step (not line) for the second 
 		// dataset, don't get ugly blobs on the line!
@@ -177,29 +181,37 @@ cpsApp.service('graphService', [function() {
 		var chart = c3.generate({
 			bindto: '#chart',
 			data: {
+					xs: {
+						'uniqseq': 'x1',
+						'cps/100': 'x1'
+					},
 					columns: [
-						mydata,
-						mydata2
+						// mydata,
+						userxdata,
+						userydata,
+						mydata2,
 					],
 					type: 'scatter',
 					types: {
+						// 'uniqseq': 'scatter',
 						'cps/100': 'step',
 					},
 					colors: {
-						'%amp': '#0000ff',
+						'uniqseq': '#0000ff',
 						'cps/100': 'red',
-						// 'cps/100': '#cc0099',
 					}
 			},
 			axis: {
 				x: {
-					label: 'Patient',
-					type: 'category',
-					categories: getSlice(myOutput).patList
+					label: 'totseqs',
+					// label: 'Patient',
+					// type: 'category',
+					// categories: getSlice(myOutput).patList
 
 				},
 				y: {
-					label: '%amp'
+					// label: '%amp'
+					label: 'uniqseqs'
 				}
 			},
 			point: {
@@ -262,6 +274,16 @@ cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', '
 	// the reverse primer nucleotide string
 	$scope.rprimer = '';
 
+	// user inputted tot and uniq seqs
+	$scope.userobj = {
+		'totseq': 0,
+		'uniqseq': 0,
+	};
+
+	// variables to be passed to the graph
+	xdata = null;
+	ydata = null;
+
 	// this function gets called when the user submits his primer
 	$scope.submitPrimer = function() {
 
@@ -273,6 +295,10 @@ cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', '
 
 			// clear graph
 			document.getElementById('chart').innerHTML = "";
+
+			// reset these
+			xdata = ['x1'];
+			ydata = ['uniqseq'];
 
 			// the specs of this class are defined in the other script - this variable will be used when calling runPrimerSet
 			var myprimerset = [new PrimerSet('user-supplied primer', [$scope.primerobj.forwardStart, $scope.primerobj.forwardEnd], [$scope.primerobj.reverseStart, $scope.primerobj.reverseEnd])];
@@ -301,7 +327,7 @@ cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', '
 					$scope.std = 100 * math.std(getSlice($scope.myoutput).pampList);
 					$scope.fprimer = refseq['HXB2'].substring($scope.primerobj['forwardStart'] - 1, $scope.primerobj['forwardEnd']);
 					$scope.rprimer = refseq['HXB2'].substring($scope.primerobj['reverseStart'] - 1, $scope.primerobj['reverseEnd']);
-					graphService.makeGraph($scope.myoutput, $scope.cps);
+					// graphService.makeGraph($scope.myoutput, $scope.cps, xdata, ydata);
 				}); // $q.all
 			} // load data
 			// otherwise if data loaded, just run
@@ -313,8 +339,15 @@ cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', '
 				$scope.std = 100 * math.std(getSlice($scope.myoutput).pampList);
 				$scope.fprimer = refseq['HXB2'].substring($scope.primerobj['forwardStart'] - 1, $scope.primerobj['forwardEnd']);
 				$scope.rprimer = refseq['HXB2'].substring($scope.primerobj['reverseStart'] - 1, $scope.primerobj['reverseEnd']);
-				graphService.makeGraph($scope.myoutput, $scope.cps);
+				// graphService.makeGraph($scope.myoutput, $scope.cps, xdata, ydata);
 			} // run
 		} // no problems with input
 	} // scope.submitPrimer
+
+	// this function gets called when the user add points to the graph generated after submit primer
+	$scope.addPoints = function() {
+		xdata.push($scope.userobj.totseq);
+		ydata.push($scope.userobj.uniqseq);
+		graphService.makeGraph($scope.myoutput, $scope.cps, xdata, ydata);
+	} // scope.addPoints
 }]);

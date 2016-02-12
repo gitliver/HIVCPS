@@ -6,6 +6,11 @@
     padding: 10px;
 }
 
+.center2 {
+    margin: auto;
+    width: 250px;
+}
+
 .box1 {
     float: left;
     /*
@@ -35,6 +40,10 @@
     overflow-x: scroll;
     color: #660066;
     font-size: 90%;
+}
+
+.box6 {
+    padding: 5px;
 }
 
 .halfline {
