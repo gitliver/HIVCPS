@@ -165,15 +165,23 @@ cpsApp.service('graphService', [function() {
 		// var mydata = ['%amp'];
 		// mydata = mydata.concat(getSlice(myOutput).pampList);
 
-		var mydata2 = ['cps/100'];
+		// var mydata2 = ['cps/100'];
 		// a horizontal line: cps is a constant
-		for (var i = 1; i < userydata.length; i++) {
-			mydata2.push(myCPS/100);
+		// for (var i = 1; i < userydata.length; i++) {
+		// 	mydata2.push(myCPS/100);
+		// }
+
+		var x2 = ['x2', 0];
+		var mydata2 = ['cps/100', 0];
+		for (var i = 1; i < userxdata.length; i++) {
+			x2.push(userxdata[i]);
+			mydata2.push(userxdata[i] * myCPS/100);
 		}
 
-		console.log(mydata2);
-		console.log(userxdata);
-		console.log(userydata);
+		// console.log(x2);
+		// console.log(mydata2);
+		// console.log(userxdata);
+		// console.log(userydata);
 
 		// if use types step (not line) for the second 
 		// dataset, don't get ugly blobs on the line!
@@ -183,18 +191,21 @@ cpsApp.service('graphService', [function() {
 			data: {
 					xs: {
 						'uniqseq': 'x1',
-						'cps/100': 'x1'
+						// 'cps/100': 'x1'
+						'cps/100': 'x2'
 					},
 					columns: [
 						// mydata,
 						userxdata,
 						userydata,
-						mydata2,
+						x2,
+						mydata2
 					],
 					type: 'scatter',
 					types: {
 						// 'uniqseq': 'scatter',
-						'cps/100': 'step',
+						// 'cps/100': 'step',
+						'cps/100': 'line',
 					},
 					colors: {
 						'uniqseq': '#0000ff',
@@ -204,6 +215,7 @@ cpsApp.service('graphService', [function() {
 			axis: {
 				x: {
 					label: 'totseqs',
+					min: 0,
 					// label: 'Patient',
 					// type: 'category',
 					// categories: getSlice(myOutput).patList
@@ -211,7 +223,8 @@ cpsApp.service('graphService', [function() {
 				},
 				y: {
 					// label: '%amp'
-					label: 'uniqseqs'
+					label: 'uniqseqs',
+					min: 0,
 				}
 			},
 			point: {
