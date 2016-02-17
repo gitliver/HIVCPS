@@ -158,71 +158,59 @@ cpsApp.service('setPcatsService', [function() {
 
 // service to graph final array of pamps
 cpsApp.service('graphService', [function() {
-	this.makeGraph = function(myOutput, myCPS, userxdata, userydata) {
+	this.makeGraph = function(myOutput, myCPS, myStd, userxdata, userydata) {
 		// http://c3js.org
 
-		// %amp list
-		// var mydata = ['%amp'];
-		// mydata = mydata.concat(getSlice(myOutput).pampList);
+		var x2 = ['x2', 0, 0];
+		var mydata2 = ['cps/100', 0, 0];
+		var stdplus = ['stdev+', 0, 0];
+		var stdneg = ['stdev-', 0, 0];
 
-		// var mydata2 = ['cps/100'];
-		// a horizontal line: cps is a constant
-		// for (var i = 1; i < userydata.length; i++) {
-		// 	mydata2.push(myCPS/100);
-		// }
-
-		var x2 = ['x2', 0];
-		var mydata2 = ['cps/100', 0];
 		for (var i = 1; i < userxdata.length; i++) {
-			x2.push(userxdata[i]);
-			mydata2.push(userxdata[i] * myCPS/100);
+			if (userxdata[i] > x2[2]) {
+				x2[2] = userxdata[i];
+				mydata2[2] = userxdata[i] * myCPS/100;
+				stdplus[2] = userxdata[i] * (myCPS + myStd)/100;
+				stdneg[2] = userxdata[i] * (myCPS - myStd)/100;
+			}
 		}
-
-		// console.log(x2);
-		// console.log(mydata2);
-		// console.log(userxdata);
-		// console.log(userydata);
-
-		// if use types step (not line) for the second 
-		// dataset, don't get ugly blobs on the line!
 
 		var chart = c3.generate({
 			bindto: '#chart',
 			data: {
 					xs: {
 						'uniqseq': 'x1',
-						// 'cps/100': 'x1'
-						'cps/100': 'x2'
+						'cps/100': 'x2',
+						'stdev+': 'x2',
+						'stdev-': 'x2',
 					},
 					columns: [
-						// mydata,
 						userxdata,
 						userydata,
 						x2,
-						mydata2
+						mydata2,
+						stdplus,
+						stdneg,
 					],
 					type: 'scatter',
 					types: {
-						// 'uniqseq': 'scatter',
-						// 'cps/100': 'step',
-						'cps/100': 'line',
+						'cps/100': 'area',
+						'stdev+': 'line',
+						'stdev-': 'line',
 					},
 					colors: {
 						'uniqseq': '#0000ff',
-						'cps/100': 'red',
+						'cps/100': '#99cc00',
+						'stdev+': '#ff9999',
+						'stdev-': '#ff9999',
 					}
 			},
 			axis: {
 				x: {
 					label: 'totseqs',
 					min: 0,
-					// label: 'Patient',
-					// type: 'category',
-					// categories: getSlice(myOutput).patList
-
 				},
 				y: {
-					// label: '%amp'
 					label: 'uniqseqs',
 					min: 0,
 				}
@@ -248,9 +236,9 @@ cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', '
 	// kearney_f = (1870,1894); kearney_r = (3409,3435)
 
 	$scope.primerobj = {
-		'forwardStart': 1870,
+		'forwardStart': 1871,
 		'forwardEnd': 1894,
-		'reverseStart': 3409,
+		'reverseStart': 3410,
 		'reverseEnd': 3435 
 	};
 
@@ -361,6 +349,6 @@ cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', '
 	$scope.addPoints = function() {
 		xdata.push($scope.userobj.totseq);
 		ydata.push($scope.userobj.uniqseq);
-		graphService.makeGraph($scope.myoutput, $scope.cps, xdata, ydata);
+		graphService.makeGraph($scope.myoutput, $scope.cps, $scope.std, xdata, ydata);
 	} // scope.addPoints
 }]);
