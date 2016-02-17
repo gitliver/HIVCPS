@@ -27,6 +27,14 @@ function getSlice(myoutput) {
 	return { 'patList': mylist, 'pampList': mylist2 };
 }
 
+// reverse complement
+function revComp(mySeq) {
+
+	// complements
+	comp = {'A':'T', 'T':'A', 'G':'C', 'C':'G', 'N':'N', '-':'-'}
+	return mySeq.split('').map(function(x){return comp[x]}).reverse().join('');
+}
+
 var cpsApp = angular.module('cpsApp', []);
 
 cpsApp.service('validateInputService', [function() {
@@ -201,6 +209,8 @@ cpsApp.service('graphService', [function() {
 					colors: {
 						'uniqseq': '#0000ff',
 						'cps/100': '#99cc00',
+						// 'stdev+': '#ff0000',
+						// 'stdev-': '#ff0000',
 						'stdev+': '#ff9999',
 						'stdev-': '#ff9999',
 					}
@@ -327,7 +337,7 @@ cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', '
 					$scope.cps = 100 * math.mean(getSlice($scope.myoutput).pampList);
 					$scope.std = 100 * math.std(getSlice($scope.myoutput).pampList);
 					$scope.fprimer = refseq['HXB2'].substring($scope.primerobj['forwardStart'] - 1, $scope.primerobj['forwardEnd']);
-					$scope.rprimer = refseq['HXB2'].substring($scope.primerobj['reverseStart'] - 1, $scope.primerobj['reverseEnd']);
+					$scope.rprimer = revComp(refseq['HXB2'].substring($scope.primerobj['reverseStart'] - 1, $scope.primerobj['reverseEnd']));
 					// graphService.makeGraph($scope.myoutput, $scope.cps, xdata, ydata);
 				}); // $q.all
 			} // load data
@@ -339,7 +349,7 @@ cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', '
 				$scope.cps = 100 * math.mean(getSlice($scope.myoutput).pampList);
 				$scope.std = 100 * math.std(getSlice($scope.myoutput).pampList);
 				$scope.fprimer = refseq['HXB2'].substring($scope.primerobj['forwardStart'] - 1, $scope.primerobj['forwardEnd']);
-				$scope.rprimer = refseq['HXB2'].substring($scope.primerobj['reverseStart'] - 1, $scope.primerobj['reverseEnd']);
+				$scope.rprimer = revComp(refseq['HXB2'].substring($scope.primerobj['reverseStart'] - 1, $scope.primerobj['reverseEnd']));
 				// graphService.makeGraph($scope.myoutput, $scope.cps, xdata, ydata);
 			} // run
 		} // no problems with input
