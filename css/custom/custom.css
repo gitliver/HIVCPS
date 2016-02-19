@@ -1,6 +1,7 @@
 .center {
     margin: auto;
-    width: 850px;
+    /* width: 850px; */
+    width: 800px;
     /* border:3px solid red; */
     /* text-align: center; */
     padding: 10px;
@@ -74,6 +75,17 @@ h3 {
 .f2 {
     font-family: 'Crimson Text', serif;
     /* color: grey; */
+}
+
+.f3 {
+    text-align: right;
+    color: grey;
+}
+
+.f3 a {
+    text-align: right;
+    color: grey;
+    text-decoration: none;
 }
 
 table {

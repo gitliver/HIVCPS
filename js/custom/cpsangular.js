@@ -369,3 +369,34 @@ cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', '
 		graphService.makeGraph($scope.myoutput, $scope.cps, $scope.std, xdata, ydata);
 	} // scope.addPoints
 }]);
+
+// Angular routing to partials
+cpsApp.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
+
+    // Saying '/' actually means: http://myurl.com/#/
+    // Saying '/test' actually means: http://myurl.com/#/test and so on
+    // In this awkward way, conflicts between Django's URL routing mechanism and
+    // Angular's are avoided, since Django only deals with non-# paths
+
+    // switch between views
+    $routeProvider
+	.when('/', {
+		templateUrl: '/jhu/partials/mainview.html',
+		controller: 'cpsCtrl'
+	})
+	.when('/about', {
+		templateUrl: '/jhu/partials/about.html',
+		controller: 'cpsCtrl'
+	})
+	.otherwise({
+		redirectTo: '/'
+	});
+
+    // $locationProvider.html5Mode({
+    //     enabled: true,
+    //     requireBase: false
+    // });	
+
+    // $locationProvider.html5Mode(true);
+
+}]);
