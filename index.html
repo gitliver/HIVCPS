@@ -20,6 +20,7 @@
 
   <!-- AngularJS -->
   <script type="text/javascript" src="js/vendor/angular.min.js"></script>
+  <script type="text/javascript" src="js/vendor/angular-route.js"></script>
 
   <!-- more JS -->
   <script type="text/javascript" src="js/custom/cpsangular.js"></script>
@@ -37,8 +38,8 @@
    
   <div class="center">
 
-  <div class="f0">Clonal Prediction Score for HIV-1 Sequences</div>
-  <i class="subhead">A Tool for Evaluating a Primer Set Against HXB2</i>
+  <div class="f0">Clonal Prediction Score Calculator</div>
+  <i class="subhead">Evaluating Primer Sets to Identify Clonal HIV-1 Sequences</i>
   <br>
   <br>
 
@@ -87,12 +88,17 @@
   <!-- once data has finished loading, output goes here: -->
   <div ng-cloak ng-if="myoutput && !isLoadingMessage">
     <br>
-    <u>Forward and reverse primers</u>:
+    HXB2 sequence at primer sites:
     <br>
     <br>
+    <u>Forward primer</u>:
     <div class="box5">{{ fprimer }}&nbsp;</div>
     <br>
+    <u>Reverse primer</u>:
     <div class="box5">{{ rprimer }}&nbsp;</div>
+    <br>
+    <u>Reverse primer (rev. complement)</u>:
+    <div class="box5">{{ rcrprimer }}&nbsp;</div>
   </div>
 
   </span> <!-- f1 font style -->
@@ -109,7 +115,7 @@
   <!-- once data has finished loading, output goes here: -->
   <div ng-cloak ng-if="myoutput && !isLoadingMessage">
 
-    <span class="heavyredborder">Your cps is: {{ cps | number }} (standard dev: {{ std | number }})</span>
+    <span class="heavyredborder">Your CPS is: {{ cps | number }} (standard dev: {{ std | number }})</span>
 
     <br>
     <br>
@@ -121,13 +127,15 @@
 
     <table border="1">
       <tr>
-      <td><strong>patient</strong></td>
+      <td><strong>subject</strong></td>
       <td><strong>total</strong></td>
       <td><strong>detectable</strong></td>
-      <td><strong>unique</strong></td>
+      <td><strong>unique detectable</strong></td>
+      <!--
       <td><strong>unique_amp</strong></td>
       <td><strong>%amp</strong></td>
       <td><strong>%det</strong></td>
+      -->
       </tr>
 
       <tr ng-repeat="(key, val) in myoutput">
@@ -135,9 +143,11 @@
       <td>{{val.total_list[0] | number}}</td>
       <td>{{val.detectable_list[0] | number}}</td>
       <td>{{val.unique_list[0] | number}}</td>
+      <!--
       <td>{{val.unique_amp_list[0] | number}}</td>
       <td>{{val.p_amp_list[0] | number}}</td>
       <td>{{val.p_det_list[0] | number}}</td>
+      -->
       </tr>
     </table>
 
@@ -157,7 +167,7 @@
     Add data points to the graph:
     <br>
     <br>
-    <span class="plab"># tot sequences analyzed:</span>
+    <span class="plab"># total sequences analyzed:</span>
     <input class="pin style2" type="number" ng-model="userobj.totseq" min="0"/>
     <br>
     <span class="plab"># uniq sequences analyzed:</span>
@@ -190,7 +200,7 @@
 
     Sarah Laskey, Christopher Pohlmeyer, Oliver Elliott, Katherine Bruner and Robert Siliciano.
     <br>
-    <strong>Optimization of PCR Strategies to Predict Clonality of Full-Length HIV-1 Sequences.</strong>
+    <strong>Evaluating Clonal Expansion of HIV-infected Cells: Optimization of PCR Strategies to Predict Clonality.</strong>
 
     <br>
     <br>

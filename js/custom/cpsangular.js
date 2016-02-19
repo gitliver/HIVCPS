@@ -35,7 +35,7 @@ function revComp(mySeq) {
 	return mySeq.split('').map(function(x){return comp[x]}).reverse().join('');
 }
 
-var cpsApp = angular.module('cpsApp', []);
+var cpsApp = angular.module('cpsApp', ['ngRoute']);
 
 cpsApp.service('validateInputService', [function() {
 	this.checkInput = function(myprimer, mypcats) {
@@ -217,11 +217,13 @@ cpsApp.service('graphService', [function() {
 			},
 			axis: {
 				x: {
-					label: 'totseqs',
+					// label: 'totseqs',
+					label: 'Number of sequences analyzed (total)',
 					min: 0,
 				},
 				y: {
-					label: 'uniqseqs',
+					// label: 'uniqseqs',
+					label: 'Number of unique sequences analyzed',
 					min: 0,
 				}
 			},
@@ -285,6 +287,9 @@ cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', '
 	// the reverse primer nucleotide string
 	$scope.rprimer = '';
 
+	// the reverse primer reverse complement nucleotide string
+	$scope.rcrprimer = '';
+
 	// user inputted tot and uniq seqs
 	$scope.userobj = {
 		'totseq': 0,
@@ -337,7 +342,8 @@ cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', '
 					$scope.cps = 100 * math.mean(getSlice($scope.myoutput).pampList);
 					$scope.std = 100 * math.std(getSlice($scope.myoutput).pampList);
 					$scope.fprimer = refseq['HXB2'].substring($scope.primerobj['forwardStart'] - 1, $scope.primerobj['forwardEnd']);
-					$scope.rprimer = revComp(refseq['HXB2'].substring($scope.primerobj['reverseStart'] - 1, $scope.primerobj['reverseEnd']));
+					$scope.rprimer = refseq['HXB2'].substring($scope.primerobj['reverseStart'] - 1, $scope.primerobj['reverseEnd']);
+					$scope.rcrprimer = revComp($scope.rprimer);
 					// graphService.makeGraph($scope.myoutput, $scope.cps, xdata, ydata);
 				}); // $q.all
 			} // load data
@@ -349,7 +355,8 @@ cpsApp.controller('cpsCtrl', ['$scope', '$http', '$q', 'validateInputService', '
 				$scope.cps = 100 * math.mean(getSlice($scope.myoutput).pampList);
 				$scope.std = 100 * math.std(getSlice($scope.myoutput).pampList);
 				$scope.fprimer = refseq['HXB2'].substring($scope.primerobj['forwardStart'] - 1, $scope.primerobj['forwardEnd']);
-				$scope.rprimer = revComp(refseq['HXB2'].substring($scope.primerobj['reverseStart'] - 1, $scope.primerobj['reverseEnd']));
+				$scope.rprimer = refseq['HXB2'].substring($scope.primerobj['reverseStart'] - 1, $scope.primerobj['reverseEnd']);
+				$scope.rcrprimer = revComp($scope.rprimer);
 				// graphService.makeGraph($scope.myoutput, $scope.cps, xdata, ydata);
 			} // run
 		} // no problems with input
