@@ -31,7 +31,7 @@ function getSlice(myoutput) {
 function revComp(mySeq) {
 
 	// complements
-	comp = {'A':'T', 'T':'A', 'G':'C', 'C':'G', 'N':'N', '-':'-'}
+	comp = {'A':'T', 'T':'A', 'G':'C', 'C':'G', 'N':'N', '-':'-'};
 	return mySeq.split('').map(function(x){return comp[x]}).reverse().join('');
 }
 
@@ -169,17 +169,24 @@ cpsApp.service('graphService', [function() {
 	this.makeGraph = function(myOutput, myCPS, myStd, userxdata, userydata) {
 		// http://c3js.org
 
+		// x-axis
 		var x2 = ['x2', 0, 0];
+		// a line with slope cps/100
 		var mydata2 = ['cps/100', 0, 0];
+		// a line with slope cps/100 +/- standard deviation
 		var stdplus = ['stdev+', 0, 0];
 		var stdneg = ['stdev-', 0, 0];
+		// the x-axis max (10% higher than the max x value)
+		var xmax = 1;
 
 		for (var i = 1; i < userxdata.length; i++) {
+			// find max
 			if (userxdata[i] > x2[2]) {
 				x2[2] = userxdata[i];
 				mydata2[2] = userxdata[i] * myCPS/100;
 				stdplus[2] = userxdata[i] * (myCPS + myStd)/100;
 				stdneg[2] = userxdata[i] * (myCPS - myStd)/100;
+				xmax = 1.10 * userxdata[i];
 			}
 		}
 
@@ -217,6 +224,7 @@ cpsApp.service('graphService', [function() {
 				x: {
 					label: 'Number of sequences analyzed (total)',
 					min: 0,
+					max: xmax,
 				},
 				y: {
 					label: 'Number of unique sequences analyzed',
