@@ -209,20 +209,16 @@ cpsApp.service('graphService', [function() {
 					colors: {
 						'uniqseq': '#0000ff',
 						'cps/100': '#99cc00',
-						// 'stdev+': '#ff0000',
-						// 'stdev-': '#ff0000',
 						'stdev+': '#ff9999',
 						'stdev-': '#ff9999',
 					}
 			},
 			axis: {
 				x: {
-					// label: 'totseqs',
 					label: 'Number of sequences analyzed (total)',
 					min: 0,
 				},
 				y: {
-					// label: 'uniqseqs',
 					label: 'Number of unique sequences analyzed',
 					min: 0,
 				}
@@ -378,15 +374,17 @@ cpsApp.config(['$routeProvider', '$locationProvider', function ($routeProvider, 
     // In this awkward way, conflicts between Django's URL routing mechanism and
     // Angular's are avoided, since Django only deals with non-# paths
 
+    // also see: http://stackoverflow.com/questions/11972026/delaying-angularjs-route-change-until-model-loaded-to-prevent-flicker
+
     // switch between views
     $routeProvider
 	.when('/', {
 		templateUrl: '/jhu/partials/mainview.html',
-		controller: 'cpsCtrl'
+		controller: 'cpsCtrl',
 	})
 	.when('/about', {
 		templateUrl: '/jhu/partials/about.html',
-		controller: 'cpsCtrl'
+		controller: 'cpsCtrl',
 	})
 	.otherwise({
 		redirectTo: '/'

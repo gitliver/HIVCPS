@@ -72,6 +72,11 @@ h3 {
     font-family: 'Roboto Slab', serif;
 }
 
+.f1big {
+    /* font-family: 'Roboto Slab', serif; */
+    font-size: 1.2em;
+}
+
 .f2 {
     font-family: 'Crimson Text', serif;
     /* color: grey; */

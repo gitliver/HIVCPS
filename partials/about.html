@@ -1,4 +1,10 @@
-Clonal prediction score (CPS) quantifies how well a primer set is able to distinguish identical HIV-1 genomes.  The CPS is equal to the fraction of unique, full-length* HIV-1 genomes that are correctly identified as unique using only the region amplified by that primer set.
+<div class="f3"><a href="/jhu">HOME</a>&nbsp; &nbsp; &nbsp; &nbsp;</div>
+<hr>
+<br>
+
+<div class="f1big"> <!-- font style -->
+
+<b>Clonal prediction score (CPS)</b> quantifies how well a primer set is able to distinguish identical HIV-1 genomes.  The CPS is equal to the fraction of unique, full-length<sup>1</sup> HIV-1 genomes that <b>are correctly identified as unique</b> using only the region amplified by that primer set.
 
 <br>
 <br>
@@ -8,9 +14,9 @@ The maximum possible CPS is 100.  A primer set with a CPS of 100 produces a uniq
 <br>
 <br>
 
-To calculate the CPS for your primer set:
+<b>To calculate the CPS for your primer set</b>:
 <ol>
-<li>Enter the HXB2 coordinates of your forward and reverse primers.  The default coordinates define an amplicon spanning p6-gag-pro, originally published by Palmer et al. (PMID 15635002).</li>
+<li>Enter the HXB2 coordinates of your forward and reverse primers.  The default coordinates define an amplicon spanning p6-gag-pro, originally published by Palmer <i>et al.</i> (PMID 15635002).</li>
 <li>Check the box(es) next to the sample type(s) that most closely represent the HIV sample you are amplifying with your primers.  For proviral DNA samples, we recommend checking all three DNA sample type boxes.</li>
 <li>Click the “submit primer” button.</li>
 <li>The tool will print out the HXB2 sequence at the primer sites specified.  Verify that the sequences match your primers.  If not, enter adjusted primer coordinates and press “submit primer” again. </li>
@@ -18,22 +24,31 @@ To calculate the CPS for your primer set:
 
 <br>
 
-Understanding output from the CPS calculator:
+<b>Understanding output from the CPS calculator</b>:
 
 <br>
 <br>
 
-Your CPS is…
+<b>Your CPS is…</b>
 <br>
 The CPS calculated for your primer set and the sample type(s) you selected is displayed in a red box.
+
 <br>
-Table data
+<br>
+
+<b>Table data</b>
 <br>
 The output table shows the results for each individual sequence alignment used to calculate your CPS.  Each row in the table represents an alignment of sequences isolated from a single infected individual.  The columns in the table show the subject ID for each alignment (subject); the total number of sequences in the alignment for that subject (total); the number of those sequences that would be detected in a PCR using your primers, i.e. the number of sequences that do not have sequence gaps overlapping your primer binding sites (detectable); and the number of unique amplicons that would be produced by that PCR (unique detectable).
+
 <br>
-Graph (optional)
+<br>
+
+<b>Graph (optional)</b>
 <br>
 You can graph your sequence data (alignments or phylogenetic trees) in the context of the CPS of the primer set used to generate those data.  The CPS quantifies the false-positive background level of clonality you may see in your own sequence data. 
 <br>
 
-* The sequences used to calculate CPS are sequenced from (at a minimum) HXB2 coordinates 2000 to 8000.  If your primers bind outside of this region, sequences that are not characterized where your primers bind will not be used to calculate your CPS.  This tool cannot be used to calculate CPS values for primers located in the 5’ LTR. 
+</div> <!-- font style -->
+<br>
+
+<sup>1</sup> The sequences used to calculate CPS are sequenced from (at a minimum) HXB2 coordinates 2000 to 8000.  If your primers bind outside of this region, sequences that are not characterized where your primers bind will not be used to calculate your CPS.  This tool cannot be used to calculate CPS values for primers located in the 5’ LTR. 
