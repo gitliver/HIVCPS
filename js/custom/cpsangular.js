@@ -387,11 +387,11 @@ cpsApp.config(['$routeProvider', '$locationProvider', function ($routeProvider, 
     // switch between views
     $routeProvider
 	.when('/', {
-		templateUrl: '/jhu/partials/mainview.html',
+		templateUrl: '/cps/partials/mainview.html',
 		controller: 'cpsCtrl',
 	})
 	.when('/about', {
-		templateUrl: '/jhu/partials/about.html',
+		templateUrl: '/cps/partials/about.html',
 		controller: 'cpsCtrl',
 	})
 	.otherwise({
