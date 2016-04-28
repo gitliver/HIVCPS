@@ -1,5 +1,9 @@
 ## HIVCPS
 
-JavaScript Web App to Compute HIV Clonal Prediction Score (CPS)
+The source code for [HIV CPS Calculator](http://silicianolab.johnshopkins.edu/cps/) - a JavaScript Web App to Compute HIV Clonal Prediction Score (CPS)
 
-Adapted into JS from Sarah L.'s Code 
+*Clonal prediction score (CPS) quantifies how well a primer set is able to distinguish identical HIV-1 genomes.*
+
+See the website for details.
+
+Written with Sarah L.
